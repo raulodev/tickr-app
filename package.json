@@ -23,14 +23,19 @@
   },
   "devDependencies": {
     "@tailwindcss/turbopack": "^4",
+    "@tanstack/react-query-devtools": "^5.105.3",
+    "@testing-library/react": "^16.3.3",
+    "@testing-library/user-event": "^14.6.8",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.4.3",
+    "msw": "^3.0.3",
     "orval": "^8.46.0",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^5.1.0"
   },
   "packageManager": "pnpm@12.16.1"
 }
