@@ -29,7 +29,11 @@ type FormValues = z.infer<typeof schema>;
 
 export function LoginForm() {
   const t = useTranslations("auth");
-  const form = useForm<FormValues>({ resolver: zodResolver(schema) });
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<FormValues>({ resolver: zodResolver(schema) });
   const { mutateAsync, isPending } = useAuthControllerLogin();
 
   async function onSubmit(values: FormValues) {
@@ -64,18 +68,42 @@ export function LoginForm() {
         <CardDescription>{t("login.subtitle")}</CardDescription>
       </CardHeader>
       <CardContent>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <Input
             type="email"
             placeholder={t("fields.email")}
-            {...form.register("email")}
+            aria-invalid={Boolean(errors.email)}
+            aria-describedby={errors.email ? "login-email-error" : undefined}
+            {...register("email")}
           />
+          {errors.email && (
+            <p
+              id="login-email-error"
+              role="alert"
+              className="text-sm text-destructive"
+            >
+              {t("login.validation.email")}
+            </p>
+          )}
           <Input
             type="password"
             placeholder={t("fields.password")}
-            {...form.register("password")}
+            aria-invalid={Boolean(errors.password)}
+            aria-describedby={
+              errors.password ? "login-password-error" : undefined
+            }
+            {...register("password")}
           />
-          <Button type="submit" disabled={form.formState.isSubmitting}>
+          {errors.password && (
+            <p
+              id="login-password-error"
+              role="alert"
+              className="text-sm text-destructive"
+            >
+              {t("login.validation.passwordMin")}
+            </p>
+          )}
+          <Button type="submit" disabled={isSubmitting}>
             {t("login.submit")}
             {isPending && <Spinner data-icon="inline-start" />}
           </Button>

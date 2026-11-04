@@ -8,6 +8,10 @@
       "title": "Login",
       "subtitle": "Welcome back! Please enter your details.",
       "submit": "Login",
+      "validation": {
+        "email": "Enter a valid email address.",
+        "passwordMin": "Password must be at least 8 characters."
+      },
       "forgotPassword": "Forgot your password?",
       "noAccount": "Don't have an account?",
       "signUp": "Sign up"

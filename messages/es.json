@@ -8,6 +8,10 @@
       "title": "Iniciar sesión",
       "subtitle": "¡Qué bueno verte de nuevo! Ingresa tus datos.",
       "submit": "Iniciar sesión",
+      "validation": {
+        "email": "Ingresa un correo electrónico válido.",
+        "passwordMin": "La contraseña debe tener al menos 8 caracteres."
+      },
       "forgotPassword": "¿Olvidaste tu contraseña?",
       "noAccount": "¿No tienes una cuenta?",
       "signUp": "Regístrate"
