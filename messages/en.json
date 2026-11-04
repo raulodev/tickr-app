@@ -1,0 +1,16 @@
+{
+  "auth": {
+    "fields": {
+      "email": "Email",
+      "password": "Password"
+    },
+    "login": {
+      "title": "Login",
+      "subtitle": "Welcome back! Please enter your details.",
+      "submit": "Login",
+      "forgotPassword": "Forgot your password?",
+      "noAccount": "Don't have an account?",
+      "signUp": "Sign up"
+    }
+  }
+}

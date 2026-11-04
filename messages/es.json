@@ -1,0 +1,8 @@
+{
+  "auth": {
+    "fields": {
+      "email": "Correo Electrónico",
+      "password": "Contraseña"
+    }
+  }
+}
