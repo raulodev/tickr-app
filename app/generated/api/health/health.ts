@@ -19,6 +19,13 @@ import type {
   UseQueryResult
 } from '@tanstack/react-query';
 
+import axios from 'axios';
+import type {
+  AxiosError,
+  AxiosRequestConfig,
+  AxiosResponse
+} from 'axios';
+
 import type {
   HealthLiveResponseDto,
   HealthReadinessResponseDto
@@ -43,44 +50,28 @@ const withQueryKey = <T extends object, K>(query: T, queryKey: K): T & { queryKe
   return result;
 };
 
-export type healthControllerLiveResponse200 = {
-  data: HealthLiveResponseDto
-  status: 200
-}
+export const healthControllerLive = (
+     options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<HealthLiveResponseDto>> => {
 
-export type healthControllerLiveResponseSuccess = (healthControllerLiveResponse200) & {
-  headers: Headers;
-};
-;
 
-export type healthControllerLiveResponse = (healthControllerLiveResponseSuccess)
+    return axios.get(
+      `/health/live`,options
+    );
+  }
 
 export const getHealthControllerLiveUrl = () => {
 
+  return axios.create({
+    baseURL: '',
+    params: null,
+  }).getUri({
+    url: `/health/live`,
+    baseURL: '',
 
 
-
-  return `/health/live`
+  });
 }
-
-export const healthControllerLive = async ( options?: RequestInit): Promise<healthControllerLiveResponse> => {
-
-  const res = await fetch(getHealthControllerLiveUrl(),
-  {
-    ...options,
-    method: 'GET'
-
-
-  }
-)
-
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-
-  const data: healthControllerLiveResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as healthControllerLiveResponse
-}
-
 
 
 
@@ -92,16 +83,16 @@ export const getHealthControllerLiveQueryKey = () => {
     }
 
 
-export const getHealthControllerLiveQueryOptions = <TData = Awaited<ReturnType<typeof healthControllerLive>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof healthControllerLive>>, TError, TData>>, fetch?: RequestInit}
+export const getHealthControllerLiveQueryOptions = <TData = Awaited<ReturnType<typeof healthControllerLive>>, TError = AxiosError<unknown>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof healthControllerLive>>, TError, TData>>, axios?: AxiosRequestConfig}
 ) => {
 
-const {query: queryOptions, fetch: fetchOptions} = options ?? {};
+const {query: queryOptions, axios: axiosOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getHealthControllerLiveQueryKey();
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof healthControllerLive>>> = ({ signal }) => healthControllerLive({ signal, ...fetchOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof healthControllerLive>>> = ({ signal }) => healthControllerLive({ signal, ...axiosOptions });
 
 
 
@@ -111,36 +102,36 @@ const {query: queryOptions, fetch: fetchOptions} = options ?? {};
 }
 
 export type HealthControllerLiveQueryResult = NonNullable<Awaited<ReturnType<typeof healthControllerLive>>>
-export type HealthControllerLiveQueryError = unknown
+export type HealthControllerLiveQueryError = AxiosError<unknown>
 
 
-export function useHealthControllerLive<TData = Awaited<ReturnType<typeof healthControllerLive>>, TError = unknown>(
+export function useHealthControllerLive<TData = Awaited<ReturnType<typeof healthControllerLive>>, TError = AxiosError<unknown>>(
   options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof healthControllerLive>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof healthControllerLive>>,
           TError,
           Awaited<ReturnType<typeof healthControllerLive>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, axios?: AxiosRequestConfig}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useHealthControllerLive<TData = Awaited<ReturnType<typeof healthControllerLive>>, TError = unknown>(
+export function useHealthControllerLive<TData = Awaited<ReturnType<typeof healthControllerLive>>, TError = AxiosError<unknown>>(
   options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof healthControllerLive>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof healthControllerLive>>,
           TError,
           Awaited<ReturnType<typeof healthControllerLive>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, axios?: AxiosRequestConfig}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useHealthControllerLive<TData = Awaited<ReturnType<typeof healthControllerLive>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof healthControllerLive>>, TError, TData>>, fetch?: RequestInit}
+export function useHealthControllerLive<TData = Awaited<ReturnType<typeof healthControllerLive>>, TError = AxiosError<unknown>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof healthControllerLive>>, TError, TData>>, axios?: AxiosRequestConfig}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useHealthControllerLive<TData = Awaited<ReturnType<typeof healthControllerLive>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof healthControllerLive>>, TError, TData>>, fetch?: RequestInit}
+export function useHealthControllerLive<TData = Awaited<ReturnType<typeof healthControllerLive>>, TError = AxiosError<unknown>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof healthControllerLive>>, TError, TData>>, axios?: AxiosRequestConfig}
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -156,51 +147,28 @@ export function useHealthControllerLive<TData = Awaited<ReturnType<typeof health
 
 
 
-export type healthControllerReadyResponse200 = {
-  data: HealthReadinessResponseDto
-  status: 200
-}
+export const healthControllerReady = (
+     options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<HealthReadinessResponseDto>> => {
 
-export type healthControllerReadyResponse503 = {
-  data: HealthReadinessResponseDto
-  status: 503
-}
 
-export type healthControllerReadyResponseSuccess = (healthControllerReadyResponse200) & {
-  headers: Headers;
-};
-export type healthControllerReadyResponseError = (healthControllerReadyResponse503) & {
-  headers: Headers;
-};
-
-export type healthControllerReadyResponse = (healthControllerReadyResponseSuccess | healthControllerReadyResponseError)
+    return axios.get(
+      `/health/ready`,options
+    );
+  }
 
 export const getHealthControllerReadyUrl = () => {
 
+  return axios.create({
+    baseURL: '',
+    params: null,
+  }).getUri({
+    url: `/health/ready`,
+    baseURL: '',
 
 
-
-  return `/health/ready`
+  });
 }
-
-export const healthControllerReady = async ( options?: RequestInit): Promise<healthControllerReadyResponse> => {
-
-  const res = await fetch(getHealthControllerReadyUrl(),
-  {
-    ...options,
-    method: 'GET'
-
-
-  }
-)
-
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-
-  const data: healthControllerReadyResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as healthControllerReadyResponse
-}
-
 
 
 
@@ -212,16 +180,16 @@ export const getHealthControllerReadyQueryKey = () => {
     }
 
 
-export const getHealthControllerReadyQueryOptions = <TData = Awaited<ReturnType<typeof healthControllerReady>>, TError = HealthReadinessResponseDto>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof healthControllerReady>>, TError, TData>>, fetch?: RequestInit}
+export const getHealthControllerReadyQueryOptions = <TData = Awaited<ReturnType<typeof healthControllerReady>>, TError = AxiosError<HealthReadinessResponseDto>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof healthControllerReady>>, TError, TData>>, axios?: AxiosRequestConfig}
 ) => {
 
-const {query: queryOptions, fetch: fetchOptions} = options ?? {};
+const {query: queryOptions, axios: axiosOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getHealthControllerReadyQueryKey();
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof healthControllerReady>>> = ({ signal }) => healthControllerReady({ signal, ...fetchOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof healthControllerReady>>> = ({ signal }) => healthControllerReady({ signal, ...axiosOptions });
 
 
 
@@ -231,36 +199,36 @@ const {query: queryOptions, fetch: fetchOptions} = options ?? {};
 }
 
 export type HealthControllerReadyQueryResult = NonNullable<Awaited<ReturnType<typeof healthControllerReady>>>
-export type HealthControllerReadyQueryError = HealthReadinessResponseDto
+export type HealthControllerReadyQueryError = AxiosError<HealthReadinessResponseDto>
 
 
-export function useHealthControllerReady<TData = Awaited<ReturnType<typeof healthControllerReady>>, TError = HealthReadinessResponseDto>(
+export function useHealthControllerReady<TData = Awaited<ReturnType<typeof healthControllerReady>>, TError = AxiosError<HealthReadinessResponseDto>>(
   options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof healthControllerReady>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof healthControllerReady>>,
           TError,
           Awaited<ReturnType<typeof healthControllerReady>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, axios?: AxiosRequestConfig}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useHealthControllerReady<TData = Awaited<ReturnType<typeof healthControllerReady>>, TError = HealthReadinessResponseDto>(
+export function useHealthControllerReady<TData = Awaited<ReturnType<typeof healthControllerReady>>, TError = AxiosError<HealthReadinessResponseDto>>(
   options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof healthControllerReady>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof healthControllerReady>>,
           TError,
           Awaited<ReturnType<typeof healthControllerReady>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, axios?: AxiosRequestConfig}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useHealthControllerReady<TData = Awaited<ReturnType<typeof healthControllerReady>>, TError = HealthReadinessResponseDto>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof healthControllerReady>>, TError, TData>>, fetch?: RequestInit}
+export function useHealthControllerReady<TData = Awaited<ReturnType<typeof healthControllerReady>>, TError = AxiosError<HealthReadinessResponseDto>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof healthControllerReady>>, TError, TData>>, axios?: AxiosRequestConfig}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useHealthControllerReady<TData = Awaited<ReturnType<typeof healthControllerReady>>, TError = HealthReadinessResponseDto>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof healthControllerReady>>, TError, TData>>, fetch?: RequestInit}
+export function useHealthControllerReady<TData = Awaited<ReturnType<typeof healthControllerReady>>, TError = AxiosError<HealthReadinessResponseDto>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof healthControllerReady>>, TError, TData>>, axios?: AxiosRequestConfig}
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 

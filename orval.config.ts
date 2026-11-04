@@ -1,13 +1,14 @@
 import { defineConfig } from "orval";
 
 export default defineConfig({
-  petstore: {
+  tickr: {
     input: "http://127.0.0.1:3000/api-json",
     output: {
       mode: "tags-split",
-      target: "./src/generated/api/client.ts",
-      schemas: "./src/generated/api/model",
+      target: "./app/generated/api/client.ts",
+      schemas: "./app/generated/api/model",
       client: "react-query",
+      httpClient: "axios",
     },
   },
 });
