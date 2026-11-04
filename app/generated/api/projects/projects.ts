@@ -62,7 +62,7 @@ export const projectControllerList = (
 
 
       return customInstance<ProjectListResponseDto>(
-      {url: `/projects`, method: 'GET',
+      {url: `/api/projects`, method: 'GET',
         params, signal
     },
       options);
@@ -73,7 +73,7 @@ export const projectControllerList = (
 
 export const getProjectControllerListQueryKey = (params?: ProjectControllerListParams,) => {
     return [
-    `/projects`, ...(params ? [params] : [])
+    `/api/projects`, ...(params ? [params] : [])
     ] as const;
     }
 
@@ -149,7 +149,7 @@ export const projectControllerCreate = (
 
 
       return customInstance<ProjectResponseDto>(
-      {url: `/projects`, method: 'POST',
+      {url: `/api/projects`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: createProjectDto, signal
     },
@@ -210,7 +210,7 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
 
       return customInstance<ProjectResponseDto>(
-      {url: `/projects/${id}`, method: 'GET', signal
+      {url: `/api/projects/${id}`, method: 'GET', signal
     },
       options);
     }
@@ -220,7 +220,7 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
 export const getProjectControllerFindOneQueryKey = (id: string,) => {
     return [
-    `/projects/${id}`
+    `/api/projects/${id}`
     ] as const;
     }
 
@@ -297,7 +297,7 @@ export const projectControllerUpdate = (
 
 
       return customInstance<ProjectResponseDto>(
-      {url: `/projects/${id}`, method: 'PATCH',
+      {url: `/api/projects/${id}`, method: 'PATCH',
       headers: {'Content-Type': 'application/json', },
       data: updateProjectDto, signal
     },
@@ -358,7 +358,7 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
 
       return customInstance<void>(
-      {url: `/projects/${id}`, method: 'DELETE', signal
+      {url: `/api/projects/${id}`, method: 'DELETE', signal
     },
       options);
     }

@@ -54,7 +54,7 @@ export const healthControllerLive = (
 
 
       return customInstance<HealthLiveResponseDto>(
-      {url: `/health/live`, method: 'GET', signal
+      {url: `/api/health/live`, method: 'GET', signal
     },
       options);
     }
@@ -64,7 +64,7 @@ export const healthControllerLive = (
 
 export const getHealthControllerLiveQueryKey = () => {
     return [
-    `/health/live`
+    `/api/health/live`
     ] as const;
     }
 
@@ -140,7 +140,7 @@ export const healthControllerReady = (
 
 
       return customInstance<HealthReadinessResponseDto>(
-      {url: `/health/ready`, method: 'GET', signal
+      {url: `/api/health/ready`, method: 'GET', signal
     },
       options);
     }
@@ -150,7 +150,7 @@ export const healthControllerReady = (
 
 export const getHealthControllerReadyQueryKey = () => {
     return [
-    `/health/ready`
+    `/api/health/ready`
     ] as const;
     }
 

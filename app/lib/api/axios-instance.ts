@@ -2,7 +2,7 @@ import Axios, { type AxiosError, type AxiosRequestConfig } from "axios";
 import { redirect } from "next/navigation";
 
 export const AXIOS_INSTANCE = Axios.create({
-  baseURL: "http://127.0.0.1:3000/api",
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
 });
 
 AXIOS_INSTANCE.interceptors.response.use(

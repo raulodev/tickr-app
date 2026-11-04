@@ -62,7 +62,7 @@ export const tenantControllerCreate = (
 
 
       return customInstance<CreateTenantResponseDto>(
-      {url: `/tenants`, method: 'POST',
+      {url: `/api/tenants`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: createTenantDto, signal
     },
@@ -123,7 +123,7 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
 
       return customInstance<TenantMemberResponseDto[]>(
-      {url: `/tenants/current/members`, method: 'GET', signal
+      {url: `/api/tenants/current/members`, method: 'GET', signal
     },
       options);
     }
@@ -133,7 +133,7 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
 export const getTenantControllerListMembersQueryKey = () => {
     return [
-    `/tenants/current/members`
+    `/api/tenants/current/members`
     ] as const;
     }
 
@@ -209,7 +209,7 @@ export const tenantControllerAddMember = (
 
 
       return customInstance<TenantMemberResponseDto>(
-      {url: `/tenants/current/members`, method: 'POST',
+      {url: `/api/tenants/current/members`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: addMemberDto, signal
     },
@@ -270,7 +270,7 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
 
       return customInstance<void>(
-      {url: `/tenants/current/members/${userId}`, method: 'DELETE', signal
+      {url: `/api/tenants/current/members/${userId}`, method: 'DELETE', signal
     },
       options);
     }
@@ -330,7 +330,7 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
 
       return customInstance<TenantMemberResponseDto>(
-      {url: `/tenants/current/members/${userId}`, method: 'PATCH',
+      {url: `/api/tenants/current/members/${userId}`, method: 'PATCH',
       headers: {'Content-Type': 'application/json', },
       data: changeRoleDto, signal
     },

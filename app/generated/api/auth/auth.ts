@@ -70,7 +70,7 @@ export const authControllerRegister = (
 
 
       return customInstance<AuthSessionResponseDto>(
-      {url: `/auth/register`, method: 'POST',
+      {url: `/api/auth/register`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: registerDto, signal
     },
@@ -131,7 +131,7 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
 
       return customInstance<AuthLoginResponseDto>(
-      {url: `/auth/login`, method: 'POST',
+      {url: `/api/auth/login`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: loginDto, signal
     },
@@ -192,7 +192,7 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
 
       return customInstance<AuthUserResponseDto>(
-      {url: `/auth/me`, method: 'GET', signal
+      {url: `/api/auth/me`, method: 'GET', signal
     },
       options);
     }
@@ -202,7 +202,7 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
 export const getAuthControllerMeQueryKey = () => {
     return [
-    `/auth/me`
+    `/api/auth/me`
     ] as const;
     }
 
@@ -278,7 +278,7 @@ export const authControllerSwitchTenant = (
 
 
       return customInstance<AccessTokenResponseDto>(
-      {url: `/auth/switch-tenant`, method: 'POST',
+      {url: `/api/auth/switch-tenant`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: switchTenantDto, signal
     },
@@ -339,7 +339,7 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
 
       return customInstance<AuthSessionResponseDto>(
-      {url: `/auth/refresh`, method: 'POST',
+      {url: `/api/auth/refresh`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: refreshDto, signal
     },
@@ -400,7 +400,7 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
 
       return customInstance<void>(
-      {url: `/auth/logout`, method: 'POST',
+      {url: `/api/auth/logout`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: refreshTokenDto, signal
     },
@@ -461,7 +461,7 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
 
       return customInstance<void>(
-      {url: `/auth/logout-all`, method: 'POST', signal
+      {url: `/api/auth/logout-all`, method: 'POST', signal
     },
       options);
     }
@@ -520,7 +520,7 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
 
       return customInstance<MessageResponseDto>(
-      {url: `/auth/verify-email`, method: 'POST',
+      {url: `/api/auth/verify-email`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: tokenDto, signal
     },
@@ -581,7 +581,7 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
 
       return customInstance<MessageResponseDto>(
-      {url: `/auth/resend-verification`, method: 'POST',
+      {url: `/api/auth/resend-verification`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: emailDto, signal
     },
@@ -642,7 +642,7 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
 
       return customInstance<MessageResponseDto>(
-      {url: `/auth/forgot-password`, method: 'POST',
+      {url: `/api/auth/forgot-password`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: emailDto, signal
     },
@@ -703,7 +703,7 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
 
       return customInstance<MessageResponseDto>(
-      {url: `/auth/reset-password`, method: 'POST',
+      {url: `/api/auth/reset-password`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: resetPasswordDto, signal
     },

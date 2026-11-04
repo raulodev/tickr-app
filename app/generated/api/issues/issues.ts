@@ -64,7 +64,7 @@ export const issueControllerList = (
 
 
       return customInstance<IssueListResponseDto>(
-      {url: `/issues`, method: 'GET',
+      {url: `/api/issues`, method: 'GET',
         params, signal
     },
       options);
@@ -75,7 +75,7 @@ export const issueControllerList = (
 
 export const getIssueControllerListQueryKey = (params?: IssueControllerListParams,) => {
     return [
-    `/issues`, ...(params ? [params] : [])
+    `/api/issues`, ...(params ? [params] : [])
     ] as const;
     }
 
@@ -151,7 +151,7 @@ export const issueControllerCreate = (
 
 
       return customInstance<IssueResponseDto>(
-      {url: `/issues`, method: 'POST',
+      {url: `/api/issues`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: createIssueDto, signal
     },
@@ -212,7 +212,7 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
 
       return customInstance<IssueResponseDto>(
-      {url: `/issues/${id}`, method: 'GET', signal
+      {url: `/api/issues/${id}`, method: 'GET', signal
     },
       options);
     }
@@ -222,7 +222,7 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
 export const getIssueControllerFindOneQueryKey = (id: string,) => {
     return [
-    `/issues/${id}`
+    `/api/issues/${id}`
     ] as const;
     }
 
@@ -299,7 +299,7 @@ export const issueControllerUpdate = (
 
 
       return customInstance<IssueResponseDto>(
-      {url: `/issues/${id}`, method: 'PATCH',
+      {url: `/api/issues/${id}`, method: 'PATCH',
       headers: {'Content-Type': 'application/json', },
       data: updateIssueDto, signal
     },
@@ -360,7 +360,7 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
 
       return customInstance<void>(
-      {url: `/issues/${id}`, method: 'DELETE', signal
+      {url: `/api/issues/${id}`, method: 'DELETE', signal
     },
       options);
     }
@@ -420,7 +420,7 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
 
       return customInstance<IssueHistoryResponseDto>(
-      {url: `/issues/${id}/history`, method: 'GET',
+      {url: `/api/issues/${id}/history`, method: 'GET',
         params, signal
     },
       options);
@@ -432,7 +432,7 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 export const getIssueControllerHistoryQueryKey = (id: string,
     params?: IssueControllerHistoryParams,) => {
     return [
-    `/issues/${id}/history`, ...(params ? [params] : [])
+    `/api/issues/${id}/history`, ...(params ? [params] : [])
     ] as const;
     }
 

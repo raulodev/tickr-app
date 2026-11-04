@@ -62,7 +62,7 @@ export const commentControllerList = (
 
 
       return customInstance<CommentListResponseDto>(
-      {url: `/issues/${issueId}/comments`, method: 'GET',
+      {url: `/api/issues/${issueId}/comments`, method: 'GET',
         params, signal
     },
       options);
@@ -74,7 +74,7 @@ export const commentControllerList = (
 export const getCommentControllerListQueryKey = (issueId: string,
     params?: CommentControllerListParams,) => {
     return [
-    `/issues/${issueId}/comments`, ...(params ? [params] : [])
+    `/api/issues/${issueId}/comments`, ...(params ? [params] : [])
     ] as const;
     }
 
@@ -156,7 +156,7 @@ export const commentControllerCreate = (
 
 
       return customInstance<CommentResponseDto>(
-      {url: `/issues/${issueId}/comments`, method: 'POST',
+      {url: `/api/issues/${issueId}/comments`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: commentBodyDto, signal
     },
@@ -218,7 +218,7 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
 
       return customInstance<CommentResponseDto>(
-      {url: `/comments/${id}`, method: 'PATCH',
+      {url: `/api/comments/${id}`, method: 'PATCH',
       headers: {'Content-Type': 'application/json', },
       data: commentBodyDto, signal
     },
@@ -279,7 +279,7 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
 
 
       return customInstance<void>(
-      {url: `/comments/${id}`, method: 'DELETE', signal
+      {url: `/api/comments/${id}`, method: 'DELETE', signal
     },
       options);
     }
