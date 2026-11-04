@@ -23,13 +23,6 @@ import type {
   UseQueryResult
 } from '@tanstack/react-query';
 
-import axios from 'axios';
-import type {
-  AxiosError,
-  AxiosRequestConfig,
-  AxiosResponse
-} from 'axios';
-
 import type {
   ApiErrorResponseDto,
   CommentBodyDto,
@@ -38,7 +31,11 @@ import type {
   CommentResponseDto
 } from '../model';
 
+import { customInstance } from '../../../lib/api/axios-instance';
+import type { ErrorType } from '../../../lib/api/axios-instance';
 
+
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 
@@ -59,30 +56,17 @@ const withQueryKey = <T extends object, K>(query: T, queryKey: K): T & { queryKe
 
 export const commentControllerList = (
     issueId: string,
-    params: CommentControllerListParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<CommentListResponseDto>> => {
+    params: CommentControllerListParams,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
 
 
-    return axios.get(
-      `/issues/${issueId}/comments`,{
-    ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
-
-export const getCommentControllerListUrl = (issueId: string,
-    params: CommentControllerListParams,) => {
-
-  return axios.create({
-    baseURL: '',
-    params: null,
-  }).getUri({
-    url: `/issues/${issueId}/comments`,
-    baseURL: '',
-    params,
-
-  });
-}
+      return customInstance<CommentListResponseDto>(
+      {url: `/issues/${issueId}/comments`, method: 'GET',
+        params, signal
+    },
+      options);
+    }
 
 
 
@@ -95,17 +79,17 @@ export const getCommentControllerListQueryKey = (issueId: string,
     }
 
 
-export const getCommentControllerListQueryOptions = <TData = Awaited<ReturnType<typeof commentControllerList>>, TError = AxiosError<ApiErrorResponseDto>>(issueId: string,
-    params: CommentControllerListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof commentControllerList>>, TError, TData>>, axios?: AxiosRequestConfig}
+export const getCommentControllerListQueryOptions = <TData = Awaited<ReturnType<typeof commentControllerList>>, TError = ErrorType<ApiErrorResponseDto>>(issueId: string,
+    params: CommentControllerListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof commentControllerList>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getCommentControllerListQueryKey(issueId,params);
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof commentControllerList>>> = ({ signal }) => commentControllerList(issueId,params, { signal, ...axiosOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof commentControllerList>>> = ({ signal }) => commentControllerList(issueId,params, requestOptions, signal);
 
 
 
@@ -115,10 +99,10 @@ const {query: queryOptions, axios: axiosOptions} = options ?? {};
 }
 
 export type CommentControllerListQueryResult = NonNullable<Awaited<ReturnType<typeof commentControllerList>>>
-export type CommentControllerListQueryError = AxiosError<ApiErrorResponseDto>
+export type CommentControllerListQueryError = ErrorType<ApiErrorResponseDto>
 
 
-export function useCommentControllerList<TData = Awaited<ReturnType<typeof commentControllerList>>, TError = AxiosError<ApiErrorResponseDto>>(
+export function useCommentControllerList<TData = Awaited<ReturnType<typeof commentControllerList>>, TError = ErrorType<ApiErrorResponseDto>>(
  issueId: string,
     params: CommentControllerListParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof commentControllerList>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
@@ -126,10 +110,10 @@ export function useCommentControllerList<TData = Awaited<ReturnType<typeof comme
           TError,
           Awaited<ReturnType<typeof commentControllerList>>
         > , 'initialData'
-      >, axios?: AxiosRequestConfig}
+      >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useCommentControllerList<TData = Awaited<ReturnType<typeof commentControllerList>>, TError = AxiosError<ApiErrorResponseDto>>(
+export function useCommentControllerList<TData = Awaited<ReturnType<typeof commentControllerList>>, TError = ErrorType<ApiErrorResponseDto>>(
  issueId: string,
     params: CommentControllerListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof commentControllerList>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
@@ -137,18 +121,18 @@ export function useCommentControllerList<TData = Awaited<ReturnType<typeof comme
           TError,
           Awaited<ReturnType<typeof commentControllerList>>
         > , 'initialData'
-      >, axios?: AxiosRequestConfig}
+      >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useCommentControllerList<TData = Awaited<ReturnType<typeof commentControllerList>>, TError = AxiosError<ApiErrorResponseDto>>(
+export function useCommentControllerList<TData = Awaited<ReturnType<typeof commentControllerList>>, TError = ErrorType<ApiErrorResponseDto>>(
  issueId: string,
-    params: CommentControllerListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof commentControllerList>>, TError, TData>>, axios?: AxiosRequestConfig}
+    params: CommentControllerListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof commentControllerList>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useCommentControllerList<TData = Awaited<ReturnType<typeof commentControllerList>>, TError = AxiosError<ApiErrorResponseDto>>(
+export function useCommentControllerList<TData = Awaited<ReturnType<typeof commentControllerList>>, TError = ErrorType<ApiErrorResponseDto>>(
  issueId: string,
-    params: CommentControllerListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof commentControllerList>>, TError, TData>>, axios?: AxiosRequestConfig}
+    params: CommentControllerListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof commentControllerList>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -166,44 +150,34 @@ export function useCommentControllerList<TData = Awaited<ReturnType<typeof comme
 
 export const commentControllerCreate = (
     issueId: string,
-    commentBodyDto: CommentBodyDto, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<CommentResponseDto>> => {
+    commentBodyDto: CommentBodyDto,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
 
 
-    return axios.post(
-      `/issues/${issueId}/comments`,
-      commentBodyDto,options
-    );
-  }
-
-export const getCommentControllerCreateUrl = (issueId: string,) => {
-
-  return axios.create({
-    baseURL: '',
-    params: null,
-  }).getUri({
-    url: `/issues/${issueId}/comments`,
-    baseURL: '',
-
-
-  });
-}
+      return customInstance<CommentResponseDto>(
+      {url: `/issues/${issueId}/comments`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: commentBodyDto, signal
+    },
+      options);
+    }
 
 
 
 
 export const getCommentControllerCreateMutationKey = () => ['commentControllerCreate'] as const;
 
-export const getCommentControllerCreateMutationOptions = <TError = AxiosError<ApiErrorResponseDto>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof commentControllerCreate>>, TError,CommentControllerCreateMutationVariables, TContext>, axios?: AxiosRequestConfig}
+export const getCommentControllerCreateMutationOptions = <TError = ErrorType<ApiErrorResponseDto>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof commentControllerCreate>>, TError,CommentControllerCreateMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof commentControllerCreate>>, TError,CommentControllerCreateMutationVariables, TContext> => {
 
 const mutationKey = getCommentControllerCreateMutationKey();
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
 
 
@@ -211,7 +185,7 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof commentControllerCreate>>, CommentControllerCreateMutationVariables> = (props) => {
           const {issueId,data} = props ?? {};
 
-          return  commentControllerCreate(issueId,data,axiosOptions)
+          return  commentControllerCreate(issueId,data,requestOptions)
         }
 
 
@@ -223,11 +197,11 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
 
     export type CommentControllerCreateMutationResult = NonNullable<Awaited<ReturnType<typeof commentControllerCreate>>>
     export type CommentControllerCreateMutationBody = CommentBodyDto
-    export type CommentControllerCreateMutationError = AxiosError<ApiErrorResponseDto>
+    export type CommentControllerCreateMutationError = ErrorType<ApiErrorResponseDto>
     export type CommentControllerCreateMutationVariables = {issueId: string;data: CommentBodyDto}
 
-    export const useCommentControllerCreate = <TError = AxiosError<ApiErrorResponseDto>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof commentControllerCreate>>, TError,CommentControllerCreateMutationVariables, TContext>, axios?: AxiosRequestConfig}
+    export const useCommentControllerCreate = <TError = ErrorType<ApiErrorResponseDto>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof commentControllerCreate>>, TError,CommentControllerCreateMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof commentControllerCreate>>,
         TError,
@@ -238,44 +212,34 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
     }
     export const commentControllerUpdate = (
     id: string,
-    commentBodyDto: CommentBodyDto, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<CommentResponseDto>> => {
+    commentBodyDto: CommentBodyDto,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
 
 
-    return axios.patch(
-      `/comments/${id}`,
-      commentBodyDto,options
-    );
-  }
-
-export const getCommentControllerUpdateUrl = (id: string,) => {
-
-  return axios.create({
-    baseURL: '',
-    params: null,
-  }).getUri({
-    url: `/comments/${id}`,
-    baseURL: '',
-
-
-  });
-}
+      return customInstance<CommentResponseDto>(
+      {url: `/comments/${id}`, method: 'PATCH',
+      headers: {'Content-Type': 'application/json', },
+      data: commentBodyDto, signal
+    },
+      options);
+    }
 
 
 
 
 export const getCommentControllerUpdateMutationKey = () => ['commentControllerUpdate'] as const;
 
-export const getCommentControllerUpdateMutationOptions = <TError = AxiosError<ApiErrorResponseDto>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof commentControllerUpdate>>, TError,CommentControllerUpdateMutationVariables, TContext>, axios?: AxiosRequestConfig}
+export const getCommentControllerUpdateMutationOptions = <TError = ErrorType<ApiErrorResponseDto>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof commentControllerUpdate>>, TError,CommentControllerUpdateMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof commentControllerUpdate>>, TError,CommentControllerUpdateMutationVariables, TContext> => {
 
 const mutationKey = getCommentControllerUpdateMutationKey();
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
 
 
@@ -283,7 +247,7 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof commentControllerUpdate>>, CommentControllerUpdateMutationVariables> = (props) => {
           const {id,data} = props ?? {};
 
-          return  commentControllerUpdate(id,data,axiosOptions)
+          return  commentControllerUpdate(id,data,requestOptions)
         }
 
 
@@ -295,11 +259,11 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
 
     export type CommentControllerUpdateMutationResult = NonNullable<Awaited<ReturnType<typeof commentControllerUpdate>>>
     export type CommentControllerUpdateMutationBody = CommentBodyDto
-    export type CommentControllerUpdateMutationError = AxiosError<ApiErrorResponseDto>
+    export type CommentControllerUpdateMutationError = ErrorType<ApiErrorResponseDto>
     export type CommentControllerUpdateMutationVariables = {id: string;data: CommentBodyDto}
 
-    export const useCommentControllerUpdate = <TError = AxiosError<ApiErrorResponseDto>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof commentControllerUpdate>>, TError,CommentControllerUpdateMutationVariables, TContext>, axios?: AxiosRequestConfig}
+    export const useCommentControllerUpdate = <TError = ErrorType<ApiErrorResponseDto>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof commentControllerUpdate>>, TError,CommentControllerUpdateMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof commentControllerUpdate>>,
         TError,
@@ -309,43 +273,32 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
       return useMutation(getCommentControllerUpdateMutationOptions(options), queryClient);
     }
     export const commentControllerRemove = (
-    id: string, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<void>> => {
+    id: string,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
 
 
-    return axios.delete(
-      `/comments/${id}`,options
-    );
-  }
-
-export const getCommentControllerRemoveUrl = (id: string,) => {
-
-  return axios.create({
-    baseURL: '',
-    params: null,
-  }).getUri({
-    url: `/comments/${id}`,
-    baseURL: '',
-
-
-  });
-}
+      return customInstance<void>(
+      {url: `/comments/${id}`, method: 'DELETE', signal
+    },
+      options);
+    }
 
 
 
 
 export const getCommentControllerRemoveMutationKey = () => ['commentControllerRemove'] as const;
 
-export const getCommentControllerRemoveMutationOptions = <TError = AxiosError<ApiErrorResponseDto>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof commentControllerRemove>>, TError,CommentControllerRemoveMutationVariables, TContext>, axios?: AxiosRequestConfig}
+export const getCommentControllerRemoveMutationOptions = <TError = ErrorType<ApiErrorResponseDto>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof commentControllerRemove>>, TError,CommentControllerRemoveMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof commentControllerRemove>>, TError,CommentControllerRemoveMutationVariables, TContext> => {
 
 const mutationKey = getCommentControllerRemoveMutationKey();
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
 
 
@@ -353,7 +306,7 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof commentControllerRemove>>, CommentControllerRemoveMutationVariables> = (props) => {
           const {id} = props ?? {};
 
-          return  commentControllerRemove(id,axiosOptions)
+          return  commentControllerRemove(id,requestOptions)
         }
 
 
@@ -365,11 +318,11 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
 
     export type CommentControllerRemoveMutationResult = NonNullable<Awaited<ReturnType<typeof commentControllerRemove>>>
 
-    export type CommentControllerRemoveMutationError = AxiosError<ApiErrorResponseDto>
+    export type CommentControllerRemoveMutationError = ErrorType<ApiErrorResponseDto>
     export type CommentControllerRemoveMutationVariables = {id: string}
 
-    export const useCommentControllerRemove = <TError = AxiosError<ApiErrorResponseDto>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof commentControllerRemove>>, TError,CommentControllerRemoveMutationVariables, TContext>, axios?: AxiosRequestConfig}
+    export const useCommentControllerRemove = <TError = ErrorType<ApiErrorResponseDto>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof commentControllerRemove>>, TError,CommentControllerRemoveMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof commentControllerRemove>>,
         TError,

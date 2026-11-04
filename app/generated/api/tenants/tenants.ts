@@ -23,13 +23,6 @@ import type {
   UseQueryResult
 } from '@tanstack/react-query';
 
-import axios from 'axios';
-import type {
-  AxiosError,
-  AxiosRequestConfig,
-  AxiosResponse
-} from 'axios';
-
 import type {
   AddMemberDto,
   ApiErrorResponseDto,
@@ -39,7 +32,11 @@ import type {
   TenantMemberResponseDto
 } from '../model';
 
+import { customInstance } from '../../../lib/api/axios-instance';
+import type { ErrorType } from '../../../lib/api/axios-instance';
 
+
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 
@@ -59,44 +56,34 @@ const withQueryKey = <T extends object, K>(query: T, queryKey: K): T & { queryKe
 };
 
 export const tenantControllerCreate = (
-    createTenantDto: CreateTenantDto, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<CreateTenantResponseDto>> => {
+    createTenantDto: CreateTenantDto,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
 
 
-    return axios.post(
-      `/tenants`,
-      createTenantDto,options
-    );
-  }
-
-export const getTenantControllerCreateUrl = () => {
-
-  return axios.create({
-    baseURL: '',
-    params: null,
-  }).getUri({
-    url: `/tenants`,
-    baseURL: '',
-
-
-  });
-}
+      return customInstance<CreateTenantResponseDto>(
+      {url: `/tenants`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: createTenantDto, signal
+    },
+      options);
+    }
 
 
 
 
 export const getTenantControllerCreateMutationKey = () => ['tenantControllerCreate'] as const;
 
-export const getTenantControllerCreateMutationOptions = <TError = AxiosError<ApiErrorResponseDto>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof tenantControllerCreate>>, TError,TenantControllerCreateMutationVariables, TContext>, axios?: AxiosRequestConfig}
+export const getTenantControllerCreateMutationOptions = <TError = ErrorType<ApiErrorResponseDto>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof tenantControllerCreate>>, TError,TenantControllerCreateMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof tenantControllerCreate>>, TError,TenantControllerCreateMutationVariables, TContext> => {
 
 const mutationKey = getTenantControllerCreateMutationKey();
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
 
 
@@ -104,7 +91,7 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof tenantControllerCreate>>, TenantControllerCreateMutationVariables> = (props) => {
           const {data} = props ?? {};
 
-          return  tenantControllerCreate(data,axiosOptions)
+          return  tenantControllerCreate(data,requestOptions)
         }
 
 
@@ -116,11 +103,11 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
 
     export type TenantControllerCreateMutationResult = NonNullable<Awaited<ReturnType<typeof tenantControllerCreate>>>
     export type TenantControllerCreateMutationBody = CreateTenantDto
-    export type TenantControllerCreateMutationError = AxiosError<ApiErrorResponseDto>
+    export type TenantControllerCreateMutationError = ErrorType<ApiErrorResponseDto>
     export type TenantControllerCreateMutationVariables = {data: CreateTenantDto}
 
-    export const useTenantControllerCreate = <TError = AxiosError<ApiErrorResponseDto>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof tenantControllerCreate>>, TError,TenantControllerCreateMutationVariables, TContext>, axios?: AxiosRequestConfig}
+    export const useTenantControllerCreate = <TError = ErrorType<ApiErrorResponseDto>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof tenantControllerCreate>>, TError,TenantControllerCreateMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof tenantControllerCreate>>,
         TError,
@@ -130,27 +117,16 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
       return useMutation(getTenantControllerCreateMutationOptions(options), queryClient);
     }
     export const tenantControllerListMembers = (
-     options?: AxiosRequestConfig
- ): Promise<AxiosResponse<TenantMemberResponseDto[]>> => {
+
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
 
 
-    return axios.get(
-      `/tenants/current/members`,options
-    );
-  }
-
-export const getTenantControllerListMembersUrl = () => {
-
-  return axios.create({
-    baseURL: '',
-    params: null,
-  }).getUri({
-    url: `/tenants/current/members`,
-    baseURL: '',
-
-
-  });
-}
+      return customInstance<TenantMemberResponseDto[]>(
+      {url: `/tenants/current/members`, method: 'GET', signal
+    },
+      options);
+    }
 
 
 
@@ -162,16 +138,16 @@ export const getTenantControllerListMembersQueryKey = () => {
     }
 
 
-export const getTenantControllerListMembersQueryOptions = <TData = Awaited<ReturnType<typeof tenantControllerListMembers>>, TError = AxiosError<ApiErrorResponseDto>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof tenantControllerListMembers>>, TError, TData>>, axios?: AxiosRequestConfig}
+export const getTenantControllerListMembersQueryOptions = <TData = Awaited<ReturnType<typeof tenantControllerListMembers>>, TError = ErrorType<ApiErrorResponseDto>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof tenantControllerListMembers>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getTenantControllerListMembersQueryKey();
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof tenantControllerListMembers>>> = ({ signal }) => tenantControllerListMembers({ signal, ...axiosOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof tenantControllerListMembers>>> = ({ signal }) => tenantControllerListMembers(requestOptions, signal);
 
 
 
@@ -181,36 +157,36 @@ const {query: queryOptions, axios: axiosOptions} = options ?? {};
 }
 
 export type TenantControllerListMembersQueryResult = NonNullable<Awaited<ReturnType<typeof tenantControllerListMembers>>>
-export type TenantControllerListMembersQueryError = AxiosError<ApiErrorResponseDto>
+export type TenantControllerListMembersQueryError = ErrorType<ApiErrorResponseDto>
 
 
-export function useTenantControllerListMembers<TData = Awaited<ReturnType<typeof tenantControllerListMembers>>, TError = AxiosError<ApiErrorResponseDto>>(
+export function useTenantControllerListMembers<TData = Awaited<ReturnType<typeof tenantControllerListMembers>>, TError = ErrorType<ApiErrorResponseDto>>(
   options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof tenantControllerListMembers>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof tenantControllerListMembers>>,
           TError,
           Awaited<ReturnType<typeof tenantControllerListMembers>>
         > , 'initialData'
-      >, axios?: AxiosRequestConfig}
+      >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useTenantControllerListMembers<TData = Awaited<ReturnType<typeof tenantControllerListMembers>>, TError = AxiosError<ApiErrorResponseDto>>(
+export function useTenantControllerListMembers<TData = Awaited<ReturnType<typeof tenantControllerListMembers>>, TError = ErrorType<ApiErrorResponseDto>>(
   options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof tenantControllerListMembers>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof tenantControllerListMembers>>,
           TError,
           Awaited<ReturnType<typeof tenantControllerListMembers>>
         > , 'initialData'
-      >, axios?: AxiosRequestConfig}
+      >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useTenantControllerListMembers<TData = Awaited<ReturnType<typeof tenantControllerListMembers>>, TError = AxiosError<ApiErrorResponseDto>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof tenantControllerListMembers>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useTenantControllerListMembers<TData = Awaited<ReturnType<typeof tenantControllerListMembers>>, TError = ErrorType<ApiErrorResponseDto>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof tenantControllerListMembers>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useTenantControllerListMembers<TData = Awaited<ReturnType<typeof tenantControllerListMembers>>, TError = AxiosError<ApiErrorResponseDto>>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof tenantControllerListMembers>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useTenantControllerListMembers<TData = Awaited<ReturnType<typeof tenantControllerListMembers>>, TError = ErrorType<ApiErrorResponseDto>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof tenantControllerListMembers>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -227,44 +203,34 @@ export function useTenantControllerListMembers<TData = Awaited<ReturnType<typeof
 
 
 export const tenantControllerAddMember = (
-    addMemberDto: AddMemberDto, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<TenantMemberResponseDto>> => {
+    addMemberDto: AddMemberDto,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
 
 
-    return axios.post(
-      `/tenants/current/members`,
-      addMemberDto,options
-    );
-  }
-
-export const getTenantControllerAddMemberUrl = () => {
-
-  return axios.create({
-    baseURL: '',
-    params: null,
-  }).getUri({
-    url: `/tenants/current/members`,
-    baseURL: '',
-
-
-  });
-}
+      return customInstance<TenantMemberResponseDto>(
+      {url: `/tenants/current/members`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: addMemberDto, signal
+    },
+      options);
+    }
 
 
 
 
 export const getTenantControllerAddMemberMutationKey = () => ['tenantControllerAddMember'] as const;
 
-export const getTenantControllerAddMemberMutationOptions = <TError = AxiosError<ApiErrorResponseDto>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof tenantControllerAddMember>>, TError,TenantControllerAddMemberMutationVariables, TContext>, axios?: AxiosRequestConfig}
+export const getTenantControllerAddMemberMutationOptions = <TError = ErrorType<ApiErrorResponseDto>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof tenantControllerAddMember>>, TError,TenantControllerAddMemberMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof tenantControllerAddMember>>, TError,TenantControllerAddMemberMutationVariables, TContext> => {
 
 const mutationKey = getTenantControllerAddMemberMutationKey();
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
 
 
@@ -272,7 +238,7 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof tenantControllerAddMember>>, TenantControllerAddMemberMutationVariables> = (props) => {
           const {data} = props ?? {};
 
-          return  tenantControllerAddMember(data,axiosOptions)
+          return  tenantControllerAddMember(data,requestOptions)
         }
 
 
@@ -284,11 +250,11 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
 
     export type TenantControllerAddMemberMutationResult = NonNullable<Awaited<ReturnType<typeof tenantControllerAddMember>>>
     export type TenantControllerAddMemberMutationBody = AddMemberDto
-    export type TenantControllerAddMemberMutationError = AxiosError<ApiErrorResponseDto>
+    export type TenantControllerAddMemberMutationError = ErrorType<ApiErrorResponseDto>
     export type TenantControllerAddMemberMutationVariables = {data: AddMemberDto}
 
-    export const useTenantControllerAddMember = <TError = AxiosError<ApiErrorResponseDto>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof tenantControllerAddMember>>, TError,TenantControllerAddMemberMutationVariables, TContext>, axios?: AxiosRequestConfig}
+    export const useTenantControllerAddMember = <TError = ErrorType<ApiErrorResponseDto>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof tenantControllerAddMember>>, TError,TenantControllerAddMemberMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof tenantControllerAddMember>>,
         TError,
@@ -298,43 +264,32 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
       return useMutation(getTenantControllerAddMemberMutationOptions(options), queryClient);
     }
     export const tenantControllerRemoveMember = (
-    userId: string, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<void>> => {
+    userId: string,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
 
 
-    return axios.delete(
-      `/tenants/current/members/${userId}`,options
-    );
-  }
-
-export const getTenantControllerRemoveMemberUrl = (userId: string,) => {
-
-  return axios.create({
-    baseURL: '',
-    params: null,
-  }).getUri({
-    url: `/tenants/current/members/${userId}`,
-    baseURL: '',
-
-
-  });
-}
+      return customInstance<void>(
+      {url: `/tenants/current/members/${userId}`, method: 'DELETE', signal
+    },
+      options);
+    }
 
 
 
 
 export const getTenantControllerRemoveMemberMutationKey = () => ['tenantControllerRemoveMember'] as const;
 
-export const getTenantControllerRemoveMemberMutationOptions = <TError = AxiosError<ApiErrorResponseDto>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof tenantControllerRemoveMember>>, TError,TenantControllerRemoveMemberMutationVariables, TContext>, axios?: AxiosRequestConfig}
+export const getTenantControllerRemoveMemberMutationOptions = <TError = ErrorType<ApiErrorResponseDto>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof tenantControllerRemoveMember>>, TError,TenantControllerRemoveMemberMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof tenantControllerRemoveMember>>, TError,TenantControllerRemoveMemberMutationVariables, TContext> => {
 
 const mutationKey = getTenantControllerRemoveMemberMutationKey();
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
 
 
@@ -342,7 +297,7 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof tenantControllerRemoveMember>>, TenantControllerRemoveMemberMutationVariables> = (props) => {
           const {userId} = props ?? {};
 
-          return  tenantControllerRemoveMember(userId,axiosOptions)
+          return  tenantControllerRemoveMember(userId,requestOptions)
         }
 
 
@@ -354,11 +309,11 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
 
     export type TenantControllerRemoveMemberMutationResult = NonNullable<Awaited<ReturnType<typeof tenantControllerRemoveMember>>>
 
-    export type TenantControllerRemoveMemberMutationError = AxiosError<ApiErrorResponseDto>
+    export type TenantControllerRemoveMemberMutationError = ErrorType<ApiErrorResponseDto>
     export type TenantControllerRemoveMemberMutationVariables = {userId: string}
 
-    export const useTenantControllerRemoveMember = <TError = AxiosError<ApiErrorResponseDto>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof tenantControllerRemoveMember>>, TError,TenantControllerRemoveMemberMutationVariables, TContext>, axios?: AxiosRequestConfig}
+    export const useTenantControllerRemoveMember = <TError = ErrorType<ApiErrorResponseDto>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof tenantControllerRemoveMember>>, TError,TenantControllerRemoveMemberMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof tenantControllerRemoveMember>>,
         TError,
@@ -369,44 +324,34 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
     }
     export const tenantControllerChangeRole = (
     userId: string,
-    changeRoleDto: ChangeRoleDto, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<TenantMemberResponseDto>> => {
+    changeRoleDto: ChangeRoleDto,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
 
 
-    return axios.patch(
-      `/tenants/current/members/${userId}`,
-      changeRoleDto,options
-    );
-  }
-
-export const getTenantControllerChangeRoleUrl = (userId: string,) => {
-
-  return axios.create({
-    baseURL: '',
-    params: null,
-  }).getUri({
-    url: `/tenants/current/members/${userId}`,
-    baseURL: '',
-
-
-  });
-}
+      return customInstance<TenantMemberResponseDto>(
+      {url: `/tenants/current/members/${userId}`, method: 'PATCH',
+      headers: {'Content-Type': 'application/json', },
+      data: changeRoleDto, signal
+    },
+      options);
+    }
 
 
 
 
 export const getTenantControllerChangeRoleMutationKey = () => ['tenantControllerChangeRole'] as const;
 
-export const getTenantControllerChangeRoleMutationOptions = <TError = AxiosError<ApiErrorResponseDto>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof tenantControllerChangeRole>>, TError,TenantControllerChangeRoleMutationVariables, TContext>, axios?: AxiosRequestConfig}
+export const getTenantControllerChangeRoleMutationOptions = <TError = ErrorType<ApiErrorResponseDto>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof tenantControllerChangeRole>>, TError,TenantControllerChangeRoleMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof tenantControllerChangeRole>>, TError,TenantControllerChangeRoleMutationVariables, TContext> => {
 
 const mutationKey = getTenantControllerChangeRoleMutationKey();
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
 
 
@@ -414,7 +359,7 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof tenantControllerChangeRole>>, TenantControllerChangeRoleMutationVariables> = (props) => {
           const {userId,data} = props ?? {};
 
-          return  tenantControllerChangeRole(userId,data,axiosOptions)
+          return  tenantControllerChangeRole(userId,data,requestOptions)
         }
 
 
@@ -426,11 +371,11 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
 
     export type TenantControllerChangeRoleMutationResult = NonNullable<Awaited<ReturnType<typeof tenantControllerChangeRole>>>
     export type TenantControllerChangeRoleMutationBody = ChangeRoleDto
-    export type TenantControllerChangeRoleMutationError = AxiosError<ApiErrorResponseDto>
+    export type TenantControllerChangeRoleMutationError = ErrorType<ApiErrorResponseDto>
     export type TenantControllerChangeRoleMutationVariables = {userId: string;data: ChangeRoleDto}
 
-    export const useTenantControllerChangeRole = <TError = AxiosError<ApiErrorResponseDto>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof tenantControllerChangeRole>>, TError,TenantControllerChangeRoleMutationVariables, TContext>, axios?: AxiosRequestConfig}
+    export const useTenantControllerChangeRole = <TError = ErrorType<ApiErrorResponseDto>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof tenantControllerChangeRole>>, TError,TenantControllerChangeRoleMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof tenantControllerChangeRole>>,
         TError,

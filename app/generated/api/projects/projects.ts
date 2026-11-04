@@ -23,13 +23,6 @@ import type {
   UseQueryResult
 } from '@tanstack/react-query';
 
-import axios from 'axios';
-import type {
-  AxiosError,
-  AxiosRequestConfig,
-  AxiosResponse
-} from 'axios';
-
 import type {
   ApiErrorResponseDto,
   CreateProjectDto,
@@ -39,7 +32,11 @@ import type {
   UpdateProjectDto
 } from '../model';
 
+import { customInstance } from '../../../lib/api/axios-instance';
+import type { ErrorType } from '../../../lib/api/axios-instance';
 
+
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 
@@ -59,29 +56,17 @@ const withQueryKey = <T extends object, K>(query: T, queryKey: K): T & { queryKe
 };
 
 export const projectControllerList = (
-    params: ProjectControllerListParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<ProjectListResponseDto>> => {
+    params: ProjectControllerListParams,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
 
 
-    return axios.get(
-      `/projects`,{
-    ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
-
-export const getProjectControllerListUrl = (params: ProjectControllerListParams,) => {
-
-  return axios.create({
-    baseURL: '',
-    params: null,
-  }).getUri({
-    url: `/projects`,
-    baseURL: '',
-    params,
-
-  });
-}
+      return customInstance<ProjectListResponseDto>(
+      {url: `/projects`, method: 'GET',
+        params, signal
+    },
+      options);
+    }
 
 
 
@@ -93,16 +78,16 @@ export const getProjectControllerListQueryKey = (params?: ProjectControllerListP
     }
 
 
-export const getProjectControllerListQueryOptions = <TData = Awaited<ReturnType<typeof projectControllerList>>, TError = AxiosError<ApiErrorResponseDto>>(params: ProjectControllerListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof projectControllerList>>, TError, TData>>, axios?: AxiosRequestConfig}
+export const getProjectControllerListQueryOptions = <TData = Awaited<ReturnType<typeof projectControllerList>>, TError = ErrorType<ApiErrorResponseDto>>(params: ProjectControllerListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof projectControllerList>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getProjectControllerListQueryKey(params);
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof projectControllerList>>> = ({ signal }) => projectControllerList(params, { signal, ...axiosOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof projectControllerList>>> = ({ signal }) => projectControllerList(params, requestOptions, signal);
 
 
 
@@ -112,36 +97,36 @@ const {query: queryOptions, axios: axiosOptions} = options ?? {};
 }
 
 export type ProjectControllerListQueryResult = NonNullable<Awaited<ReturnType<typeof projectControllerList>>>
-export type ProjectControllerListQueryError = AxiosError<ApiErrorResponseDto>
+export type ProjectControllerListQueryError = ErrorType<ApiErrorResponseDto>
 
 
-export function useProjectControllerList<TData = Awaited<ReturnType<typeof projectControllerList>>, TError = AxiosError<ApiErrorResponseDto>>(
+export function useProjectControllerList<TData = Awaited<ReturnType<typeof projectControllerList>>, TError = ErrorType<ApiErrorResponseDto>>(
  params: ProjectControllerListParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof projectControllerList>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof projectControllerList>>,
           TError,
           Awaited<ReturnType<typeof projectControllerList>>
         > , 'initialData'
-      >, axios?: AxiosRequestConfig}
+      >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useProjectControllerList<TData = Awaited<ReturnType<typeof projectControllerList>>, TError = AxiosError<ApiErrorResponseDto>>(
+export function useProjectControllerList<TData = Awaited<ReturnType<typeof projectControllerList>>, TError = ErrorType<ApiErrorResponseDto>>(
  params: ProjectControllerListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof projectControllerList>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof projectControllerList>>,
           TError,
           Awaited<ReturnType<typeof projectControllerList>>
         > , 'initialData'
-      >, axios?: AxiosRequestConfig}
+      >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useProjectControllerList<TData = Awaited<ReturnType<typeof projectControllerList>>, TError = AxiosError<ApiErrorResponseDto>>(
- params: ProjectControllerListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof projectControllerList>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useProjectControllerList<TData = Awaited<ReturnType<typeof projectControllerList>>, TError = ErrorType<ApiErrorResponseDto>>(
+ params: ProjectControllerListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof projectControllerList>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useProjectControllerList<TData = Awaited<ReturnType<typeof projectControllerList>>, TError = AxiosError<ApiErrorResponseDto>>(
- params: ProjectControllerListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof projectControllerList>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useProjectControllerList<TData = Awaited<ReturnType<typeof projectControllerList>>, TError = ErrorType<ApiErrorResponseDto>>(
+ params: ProjectControllerListParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof projectControllerList>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -158,44 +143,34 @@ export function useProjectControllerList<TData = Awaited<ReturnType<typeof proje
 
 
 export const projectControllerCreate = (
-    createProjectDto: CreateProjectDto, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<ProjectResponseDto>> => {
+    createProjectDto: CreateProjectDto,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
 
 
-    return axios.post(
-      `/projects`,
-      createProjectDto,options
-    );
-  }
-
-export const getProjectControllerCreateUrl = () => {
-
-  return axios.create({
-    baseURL: '',
-    params: null,
-  }).getUri({
-    url: `/projects`,
-    baseURL: '',
-
-
-  });
-}
+      return customInstance<ProjectResponseDto>(
+      {url: `/projects`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: createProjectDto, signal
+    },
+      options);
+    }
 
 
 
 
 export const getProjectControllerCreateMutationKey = () => ['projectControllerCreate'] as const;
 
-export const getProjectControllerCreateMutationOptions = <TError = AxiosError<ApiErrorResponseDto>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof projectControllerCreate>>, TError,ProjectControllerCreateMutationVariables, TContext>, axios?: AxiosRequestConfig}
+export const getProjectControllerCreateMutationOptions = <TError = ErrorType<ApiErrorResponseDto>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof projectControllerCreate>>, TError,ProjectControllerCreateMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof projectControllerCreate>>, TError,ProjectControllerCreateMutationVariables, TContext> => {
 
 const mutationKey = getProjectControllerCreateMutationKey();
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
 
 
@@ -203,7 +178,7 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof projectControllerCreate>>, ProjectControllerCreateMutationVariables> = (props) => {
           const {data} = props ?? {};
 
-          return  projectControllerCreate(data,axiosOptions)
+          return  projectControllerCreate(data,requestOptions)
         }
 
 
@@ -215,11 +190,11 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
 
     export type ProjectControllerCreateMutationResult = NonNullable<Awaited<ReturnType<typeof projectControllerCreate>>>
     export type ProjectControllerCreateMutationBody = CreateProjectDto
-    export type ProjectControllerCreateMutationError = AxiosError<ApiErrorResponseDto>
+    export type ProjectControllerCreateMutationError = ErrorType<ApiErrorResponseDto>
     export type ProjectControllerCreateMutationVariables = {data: CreateProjectDto}
 
-    export const useProjectControllerCreate = <TError = AxiosError<ApiErrorResponseDto>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof projectControllerCreate>>, TError,ProjectControllerCreateMutationVariables, TContext>, axios?: AxiosRequestConfig}
+    export const useProjectControllerCreate = <TError = ErrorType<ApiErrorResponseDto>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof projectControllerCreate>>, TError,ProjectControllerCreateMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof projectControllerCreate>>,
         TError,
@@ -229,27 +204,16 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
       return useMutation(getProjectControllerCreateMutationOptions(options), queryClient);
     }
     export const projectControllerFindOne = (
-    id: string, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<ProjectResponseDto>> => {
+    id: string,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
 
 
-    return axios.get(
-      `/projects/${id}`,options
-    );
-  }
-
-export const getProjectControllerFindOneUrl = (id: string,) => {
-
-  return axios.create({
-    baseURL: '',
-    params: null,
-  }).getUri({
-    url: `/projects/${id}`,
-    baseURL: '',
-
-
-  });
-}
+      return customInstance<ProjectResponseDto>(
+      {url: `/projects/${id}`, method: 'GET', signal
+    },
+      options);
+    }
 
 
 
@@ -261,16 +225,16 @@ export const getProjectControllerFindOneQueryKey = (id: string,) => {
     }
 
 
-export const getProjectControllerFindOneQueryOptions = <TData = Awaited<ReturnType<typeof projectControllerFindOne>>, TError = AxiosError<ApiErrorResponseDto>>(id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof projectControllerFindOne>>, TError, TData>>, axios?: AxiosRequestConfig}
+export const getProjectControllerFindOneQueryOptions = <TData = Awaited<ReturnType<typeof projectControllerFindOne>>, TError = ErrorType<ApiErrorResponseDto>>(id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof projectControllerFindOne>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
 ) => {
 
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getProjectControllerFindOneQueryKey(id);
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof projectControllerFindOne>>> = ({ signal }) => projectControllerFindOne(id, { signal, ...axiosOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof projectControllerFindOne>>> = ({ signal }) => projectControllerFindOne(id, requestOptions, signal);
 
 
 
@@ -280,36 +244,36 @@ const {query: queryOptions, axios: axiosOptions} = options ?? {};
 }
 
 export type ProjectControllerFindOneQueryResult = NonNullable<Awaited<ReturnType<typeof projectControllerFindOne>>>
-export type ProjectControllerFindOneQueryError = AxiosError<ApiErrorResponseDto>
+export type ProjectControllerFindOneQueryError = ErrorType<ApiErrorResponseDto>
 
 
-export function useProjectControllerFindOne<TData = Awaited<ReturnType<typeof projectControllerFindOne>>, TError = AxiosError<ApiErrorResponseDto>>(
+export function useProjectControllerFindOne<TData = Awaited<ReturnType<typeof projectControllerFindOne>>, TError = ErrorType<ApiErrorResponseDto>>(
  id: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof projectControllerFindOne>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof projectControllerFindOne>>,
           TError,
           Awaited<ReturnType<typeof projectControllerFindOne>>
         > , 'initialData'
-      >, axios?: AxiosRequestConfig}
+      >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useProjectControllerFindOne<TData = Awaited<ReturnType<typeof projectControllerFindOne>>, TError = AxiosError<ApiErrorResponseDto>>(
+export function useProjectControllerFindOne<TData = Awaited<ReturnType<typeof projectControllerFindOne>>, TError = ErrorType<ApiErrorResponseDto>>(
  id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof projectControllerFindOne>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof projectControllerFindOne>>,
           TError,
           Awaited<ReturnType<typeof projectControllerFindOne>>
         > , 'initialData'
-      >, axios?: AxiosRequestConfig}
+      >, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useProjectControllerFindOne<TData = Awaited<ReturnType<typeof projectControllerFindOne>>, TError = AxiosError<ApiErrorResponseDto>>(
- id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof projectControllerFindOne>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useProjectControllerFindOne<TData = Awaited<ReturnType<typeof projectControllerFindOne>>, TError = ErrorType<ApiErrorResponseDto>>(
+ id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof projectControllerFindOne>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useProjectControllerFindOne<TData = Awaited<ReturnType<typeof projectControllerFindOne>>, TError = AxiosError<ApiErrorResponseDto>>(
- id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof projectControllerFindOne>>, TError, TData>>, axios?: AxiosRequestConfig}
+export function useProjectControllerFindOne<TData = Awaited<ReturnType<typeof projectControllerFindOne>>, TError = ErrorType<ApiErrorResponseDto>>(
+ id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof projectControllerFindOne>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -327,44 +291,34 @@ export function useProjectControllerFindOne<TData = Awaited<ReturnType<typeof pr
 
 export const projectControllerUpdate = (
     id: string,
-    updateProjectDto: UpdateProjectDto, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<ProjectResponseDto>> => {
+    updateProjectDto: UpdateProjectDto,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
 
 
-    return axios.patch(
-      `/projects/${id}`,
-      updateProjectDto,options
-    );
-  }
-
-export const getProjectControllerUpdateUrl = (id: string,) => {
-
-  return axios.create({
-    baseURL: '',
-    params: null,
-  }).getUri({
-    url: `/projects/${id}`,
-    baseURL: '',
-
-
-  });
-}
+      return customInstance<ProjectResponseDto>(
+      {url: `/projects/${id}`, method: 'PATCH',
+      headers: {'Content-Type': 'application/json', },
+      data: updateProjectDto, signal
+    },
+      options);
+    }
 
 
 
 
 export const getProjectControllerUpdateMutationKey = () => ['projectControllerUpdate'] as const;
 
-export const getProjectControllerUpdateMutationOptions = <TError = AxiosError<ApiErrorResponseDto>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof projectControllerUpdate>>, TError,ProjectControllerUpdateMutationVariables, TContext>, axios?: AxiosRequestConfig}
+export const getProjectControllerUpdateMutationOptions = <TError = ErrorType<ApiErrorResponseDto>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof projectControllerUpdate>>, TError,ProjectControllerUpdateMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof projectControllerUpdate>>, TError,ProjectControllerUpdateMutationVariables, TContext> => {
 
 const mutationKey = getProjectControllerUpdateMutationKey();
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
 
 
@@ -372,7 +326,7 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof projectControllerUpdate>>, ProjectControllerUpdateMutationVariables> = (props) => {
           const {id,data} = props ?? {};
 
-          return  projectControllerUpdate(id,data,axiosOptions)
+          return  projectControllerUpdate(id,data,requestOptions)
         }
 
 
@@ -384,11 +338,11 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
 
     export type ProjectControllerUpdateMutationResult = NonNullable<Awaited<ReturnType<typeof projectControllerUpdate>>>
     export type ProjectControllerUpdateMutationBody = UpdateProjectDto
-    export type ProjectControllerUpdateMutationError = AxiosError<ApiErrorResponseDto>
+    export type ProjectControllerUpdateMutationError = ErrorType<ApiErrorResponseDto>
     export type ProjectControllerUpdateMutationVariables = {id: string;data: UpdateProjectDto}
 
-    export const useProjectControllerUpdate = <TError = AxiosError<ApiErrorResponseDto>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof projectControllerUpdate>>, TError,ProjectControllerUpdateMutationVariables, TContext>, axios?: AxiosRequestConfig}
+    export const useProjectControllerUpdate = <TError = ErrorType<ApiErrorResponseDto>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof projectControllerUpdate>>, TError,ProjectControllerUpdateMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof projectControllerUpdate>>,
         TError,
@@ -398,43 +352,32 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
       return useMutation(getProjectControllerUpdateMutationOptions(options), queryClient);
     }
     export const projectControllerRemove = (
-    id: string, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<void>> => {
+    id: string,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
 
 
-    return axios.delete(
-      `/projects/${id}`,options
-    );
-  }
-
-export const getProjectControllerRemoveUrl = (id: string,) => {
-
-  return axios.create({
-    baseURL: '',
-    params: null,
-  }).getUri({
-    url: `/projects/${id}`,
-    baseURL: '',
-
-
-  });
-}
+      return customInstance<void>(
+      {url: `/projects/${id}`, method: 'DELETE', signal
+    },
+      options);
+    }
 
 
 
 
 export const getProjectControllerRemoveMutationKey = () => ['projectControllerRemove'] as const;
 
-export const getProjectControllerRemoveMutationOptions = <TError = AxiosError<ApiErrorResponseDto>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof projectControllerRemove>>, TError,ProjectControllerRemoveMutationVariables, TContext>, axios?: AxiosRequestConfig}
+export const getProjectControllerRemoveMutationOptions = <TError = ErrorType<ApiErrorResponseDto>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof projectControllerRemove>>, TError,ProjectControllerRemoveMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
 ): UseMutationOptions<Awaited<ReturnType<typeof projectControllerRemove>>, TError,ProjectControllerRemoveMutationVariables, TContext> => {
 
 const mutationKey = getProjectControllerRemoveMutationKey();
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
 
 
@@ -442,7 +385,7 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof projectControllerRemove>>, ProjectControllerRemoveMutationVariables> = (props) => {
           const {id} = props ?? {};
 
-          return  projectControllerRemove(id,axiosOptions)
+          return  projectControllerRemove(id,requestOptions)
         }
 
 
@@ -454,11 +397,11 @@ const {mutation: mutationOptions, axios: axiosOptions} = options ?
 
     export type ProjectControllerRemoveMutationResult = NonNullable<Awaited<ReturnType<typeof projectControllerRemove>>>
 
-    export type ProjectControllerRemoveMutationError = AxiosError<ApiErrorResponseDto>
+    export type ProjectControllerRemoveMutationError = ErrorType<ApiErrorResponseDto>
     export type ProjectControllerRemoveMutationVariables = {id: string}
 
-    export const useProjectControllerRemove = <TError = AxiosError<ApiErrorResponseDto>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof projectControllerRemove>>, TError,ProjectControllerRemoveMutationVariables, TContext>, axios?: AxiosRequestConfig}
+    export const useProjectControllerRemove = <TError = ErrorType<ApiErrorResponseDto>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof projectControllerRemove>>, TError,ProjectControllerRemoveMutationVariables, TContext>, request?: SecondParameter<typeof customInstance>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof projectControllerRemove>>,
         TError,
