@@ -12,5 +12,10 @@
       "noAccount": "Don't have an account?",
       "signUp": "Sign up"
     }
+  },
+  "LanguageSwitcher": {
+    "label": "Select language",
+    "english": "English",
+    "spanish": "Spanish"
   }
 }

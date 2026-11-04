@@ -3,6 +3,19 @@
     "fields": {
       "email": "Correo Electrónico",
       "password": "Contraseña"
+    },
+    "login": {
+      "title": "Iniciar sesión",
+      "subtitle": "¡Qué bueno verte de nuevo! Ingresa tus datos.",
+      "submit": "Iniciar sesión",
+      "forgotPassword": "¿Olvidaste tu contraseña?",
+      "noAccount": "¿No tienes una cuenta?",
+      "signUp": "Regístrate"
     }
+  },
+  "LanguageSwitcher": {
+    "label": "Selecciona idioma",
+    "english": "Inglés",
+    "spanish": "Español"
   }
 }
