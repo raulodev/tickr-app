@@ -1,20 +1,29 @@
 {
   "auth": {
+    "validation": {
+      "email": "Ingresa un correo electrónico válido.",
+      "passwordMin": "La contraseña debe tener al menos 8 caracteres.",
+      "name": "El nombre es requerido",
+      "tenantName": "El nombre de organización es requerida"
+    },
     "fields": {
       "email": "Correo Electrónico",
-      "password": "Contraseña"
+      "password": "Contraseña",
+      "name": "Nombre",
+      "tenantName": "Organización"
     },
     "login": {
       "title": "Iniciar sesión",
       "subtitle": "¡Qué bueno verte de nuevo! Ingresa tus datos.",
       "submit": "Iniciar sesión",
-      "validation": {
-        "email": "Ingresa un correo electrónico válido.",
-        "passwordMin": "La contraseña debe tener al menos 8 caracteres."
-      },
       "forgotPassword": "¿Olvidaste tu contraseña?",
       "noAccount": "¿No tienes una cuenta?",
       "signUp": "Regístrate"
+    },
+    "register": {
+      "title": "Registrar",
+      "subtitle": "Crear una cuenta",
+      "submit": "Registrar"
     }
   },
   "LanguageSwitcher": {

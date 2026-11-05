@@ -40,8 +40,7 @@ export function LoginForm() {
     try {
       const result = await mutateAsync({
         data: {
-          email: values.email,
-          password: values.password,
+          ...values,
         },
       });
 
@@ -82,7 +81,7 @@ export function LoginForm() {
               role="alert"
               className="text-sm text-destructive"
             >
-              {t("login.validation.email")}
+              {t("validation.email")}
             </p>
           )}
           <Input
@@ -100,9 +99,10 @@ export function LoginForm() {
               role="alert"
               className="text-sm text-destructive"
             >
-              {t("login.validation.passwordMin")}
+              {t("validation.passwordMin")}
             </p>
           )}
+          {/* TODO: connect to register form */}
           <Button type="submit" disabled={isSubmitting}>
             {t("login.submit")}
             {isPending && <Spinner data-icon="inline-start" />}

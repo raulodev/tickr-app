@@ -1,20 +1,29 @@
 {
   "auth": {
+    "validation": {
+      "email": "Enter a valid email address.",
+      "passwordMin": "Password must be at least 8 characters.",
+      "name": "The name is required",
+      "tenantName": "The organization is required"
+    },
     "fields": {
       "email": "Email",
-      "password": "Password"
+      "password": "Password",
+      "name": "Name",
+      "tenantName": "Organization"
     },
     "login": {
       "title": "Login",
       "subtitle": "Welcome back! Please enter your details.",
       "submit": "Login",
-      "validation": {
-        "email": "Enter a valid email address.",
-        "passwordMin": "Password must be at least 8 characters."
-      },
       "forgotPassword": "Forgot your password?",
       "noAccount": "Don't have an account?",
       "signUp": "Sign up"
+    },
+    "register": {
+      "title": "Register",
+      "subtitle": "Create a new account",
+      "submit": "Register"
     }
   },
   "LanguageSwitcher": {
