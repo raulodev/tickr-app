@@ -23,6 +23,8 @@
     "register": {
       "title": "Registrar",
       "subtitle": "Crear una cuenta",
+      "haveAccount": "¿Ya tienes una cuenta?",
+      "signIn": "Inicia sesión",
       "submit": "Registrar"
     }
   },

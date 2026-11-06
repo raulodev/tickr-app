@@ -15,6 +15,7 @@ import { useAuthControllerLogin } from "@/generated/api";
 import type { ApiErrorResponseDto } from "@/generated/api/model";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { isAxiosError } from "axios";
+import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { redirect } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -102,7 +103,17 @@ export function LoginForm() {
               {t("validation.passwordMin")}
             </p>
           )}
-          {/* TODO: connect to register form */}
+
+          <p className="text-center text-sm text-muted-foreground">
+            {t("login.noAccount")}{" "}
+            <Link
+              href="/register"
+              className="font-medium text-primary underline-offset-4 hover:underline"
+            >
+              {t("login.signUp")}
+            </Link>
+          </p>
+
           <Button type="submit" disabled={isSubmitting}>
             {t("login.submit")}
             {isPending && <Spinner data-icon="inline-start" />}
