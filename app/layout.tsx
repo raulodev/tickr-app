@@ -4,6 +4,7 @@ import { Providers } from "@/app/providers";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale } from "next-intl/server";
 import { Toaster } from "@/components/ui/toast";
+import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
 
 export const instant = false;
@@ -30,13 +31,21 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang={locale}
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
       <body className="flex min-h-screen flex-col">
         <Providers>
-          <NextIntlClientProvider>
-            {children}
-            <Toaster />
-          </NextIntlClientProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <NextIntlClientProvider>
+              {children}
+              <Toaster />
+            </NextIntlClientProvider>
+          </ThemeProvider>
         </Providers>
       </body>
     </html>

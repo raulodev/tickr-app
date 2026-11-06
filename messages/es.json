@@ -32,5 +32,10 @@
     "label": "Selecciona idioma",
     "english": "Inglés",
     "spanish": "Español"
+  },
+  "ModeToggle": {
+    "dark": "Oscuro",
+    "light": "Claro",
+    "system": "Sistema"
   }
 }

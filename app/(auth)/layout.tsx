@@ -1,4 +1,5 @@
 import { LanguageSwitcher } from "@/components/language-switcher/language-switcher";
+import { ModeToggle } from "@/components/mode-toggle";
 
 export default async function AuthLayout({
   children,
@@ -7,8 +8,9 @@ export default async function AuthLayout({
 }) {
   return (
     <div className="flex flex-1 flex-col">
-      <div className="flex justify-end px-4 pt-4">
+      <div className="flex justify-end px-4 pt-4 gap-4">
         <LanguageSwitcher />
+        <ModeToggle />
       </div>
       <main className="flex flex-1 items-center justify-center px-4 py-8">
         {children}
