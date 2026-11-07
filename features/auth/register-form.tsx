@@ -20,7 +20,6 @@ import { useTranslations } from "next-intl";
 import { redirect } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { setAuthCookie } from "./actions";
 
 const schema = z.object({
   tenantName: z.string().nonempty(),
@@ -48,10 +47,14 @@ export function RegisterForm() {
         },
       });
 
-      await setAuthCookie(result.access_token, result.refresh_token);
+      toast.add({
+        type: "success",
+        description: result.message,
+        priority: "high",
+        timeout: 30_000,
+      });
 
-      // TODO: Send email verification
-      redirect("/dashboard/");
+      redirect("/login");
     } catch (error: unknown) {
       if (!isAxiosError<ApiErrorResponseDto>(error)) {
         throw error;

@@ -69,7 +69,7 @@ export const authControllerRegister = (
 ) => {
 
 
-      return customInstance<AuthSessionResponseDto>(
+      return customInstance<MessageResponseDto>(
       {url: `/api/auth/register`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: registerDto, signal
