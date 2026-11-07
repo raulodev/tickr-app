@@ -26,6 +26,11 @@
       "haveAccount": "¿Ya tienes una cuenta?",
       "signIn": "Inicia sesión",
       "submit": "Registrar"
+    },
+    "forgotPassword": {
+      "title": "Recuperar contraseña",
+      "subtitle": "Para restablecer tu contraseña, por favor sigue el enlace proporcionado en este correo electrónico.",
+      "submit": "Enviar"
     }
   },
   "LanguageSwitcher": {

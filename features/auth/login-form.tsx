@@ -114,6 +114,15 @@ export function LoginForm() {
             </Link>
           </p>
 
+          <p className="text-center text-sm text-muted-foreground">
+            <Link
+              href="/forgot-password"
+              className="font-medium text-primary underline-offset-4 hover:underline"
+            >
+              {t("login.forgotPassword")}
+            </Link>
+          </p>
+
           <Button type="submit" disabled={isSubmitting}>
             {t("login.submit")}
             {isPending && <Spinner data-icon="inline-start" />}

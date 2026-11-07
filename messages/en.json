@@ -26,6 +26,11 @@
       "haveAccount": "Already have an account?",
       "signIn": "Log in",
       "submit": "Register"
+    },
+    "forgotPassword": {
+      "title": "Recover password",
+      "subtitle": "To reset your password, please follow the link provided in this email.",
+      "submit": "Send"
     }
   },
   "LanguageSwitcher": {
