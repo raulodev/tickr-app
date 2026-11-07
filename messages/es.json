@@ -4,7 +4,8 @@
       "email": "Ingresa un correo electrónico válido.",
       "passwordMin": "La contraseña debe tener al menos 8 caracteres.",
       "name": "El nombre es requerido",
-      "tenantName": "El nombre de organización es requerida"
+      "tenantName": "El nombre de organización es requerida",
+      "link": "Enlace no válido. No se pudo procesar la solicitud de recuperación de contraseña."
     },
     "fields": {
       "email": "Correo Electrónico",
@@ -31,6 +32,11 @@
       "title": "Recuperar contraseña",
       "subtitle": "Para restablecer tu contraseña, por favor sigue el enlace proporcionado en este correo electrónico.",
       "submit": "Enviar"
+    },
+    "resetPassword": {
+      "title": "Restablecer contraseña",
+      "subtitle": "Ingrese su nueva contraseña",
+      "submit": "Cambiar contraseña"
     }
   },
   "LanguageSwitcher": {

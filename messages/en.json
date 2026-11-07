@@ -4,7 +4,8 @@
       "email": "Enter a valid email address.",
       "passwordMin": "Password must be at least 8 characters.",
       "name": "The name is required",
-      "tenantName": "The organization is required"
+      "tenantName": "The organization is required",
+      "link": "Invalid link. The password recovery request could not be processed."
     },
     "fields": {
       "email": "Email",
@@ -31,6 +32,11 @@
       "title": "Recover password",
       "subtitle": "To reset your password, please follow the link provided in this email.",
       "submit": "Send"
+    },
+    "resetPassword": {
+      "title": "Reset Password",
+      "subtitle": "Enter your new password",
+      "submit": "Change Password"
     }
   },
   "LanguageSwitcher": {
