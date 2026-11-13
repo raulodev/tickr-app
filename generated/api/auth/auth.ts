@@ -271,7 +271,66 @@ export function useAuthControllerMe<TData = Awaited<ReturnType<typeof authContro
 
 
 
-export const authControllerSwitchTenant = (
+export const authControllerDeleteAccount = (
+
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+
+
+      return customInstance<void>(
+      {url: `/api/auth/me`, method: 'DELETE', signal
+    },
+      options);
+    }
+
+
+
+
+export const getAuthControllerDeleteAccountMutationKey = () => ['authControllerDeleteAccount'] as const;
+
+export const getAuthControllerDeleteAccountMutationOptions = <TError = ErrorType<ApiErrorResponseDto>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof authControllerDeleteAccount>>, TError,void, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof authControllerDeleteAccount>>, TError,void, TContext> => {
+
+const mutationKey = getAuthControllerDeleteAccountMutationKey();
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof authControllerDeleteAccount>>, void> = () => {
+
+
+          return  authControllerDeleteAccount(requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type AuthControllerDeleteAccountMutationResult = NonNullable<Awaited<ReturnType<typeof authControllerDeleteAccount>>>
+
+    export type AuthControllerDeleteAccountMutationError = ErrorType<ApiErrorResponseDto>
+
+
+    export const useAuthControllerDeleteAccount = <TError = ErrorType<ApiErrorResponseDto>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof authControllerDeleteAccount>>, TError,void, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof authControllerDeleteAccount>>,
+        TError,
+        void,
+        TContext
+      > => {
+      return useMutation(getAuthControllerDeleteAccountMutationOptions(options), queryClient);
+    }
+    export const authControllerSwitchTenant = (
     switchTenantDto: SwitchTenantDto,
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
