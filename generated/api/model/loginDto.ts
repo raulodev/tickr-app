@@ -4,8 +4,14 @@
  * Tickr
  * OpenAPI spec version: 1.0
  */
+import type { LoginDtoProvider } from './loginDtoProvider';
 
 export interface LoginDto {
   email: string;
-  password: string;
+  provider: LoginDtoProvider;
+  oAuthToken: string;
+  /** @nullable */
+  oAuthTokenSecret?: string | null;
+  /** @nullable */
+  name?: string | null;
 }

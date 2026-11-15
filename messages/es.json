@@ -15,11 +15,12 @@
     },
     "login": {
       "title": "Iniciar sesión",
-      "subtitle": "¡Qué bueno verte de nuevo! Ingresa tus datos.",
+      "subtitle": "Inicia sesión con uno de los proveedores OAuth disponibles.",
       "submit": "Iniciar sesión",
       "forgotPassword": "¿Olvidaste tu contraseña?",
       "noAccount": "¿No tienes una cuenta?",
-      "signUp": "Regístrate"
+      "signUp": "Regístrate",
+      "signedInAs": "Sesión iniciada como"
     },
     "register": {
       "title": "Registrar",
@@ -28,15 +29,8 @@
       "signIn": "Inicia sesión",
       "submit": "Registrar"
     },
-    "forgotPassword": {
-      "title": "Recuperar contraseña",
-      "subtitle": "Para restablecer tu contraseña, por favor sigue el enlace proporcionado en este correo electrónico.",
-      "submit": "Enviar"
-    },
-    "resetPassword": {
-      "title": "Restablecer contraseña",
-      "subtitle": "Ingrese su nueva contraseña",
-      "submit": "Cambiar contraseña"
+    "logout": {
+      "title": "Cerrar sesión"
     }
   },
   "LanguageSwitcher": {

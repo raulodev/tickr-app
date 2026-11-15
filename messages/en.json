@@ -15,11 +15,12 @@
     },
     "login": {
       "title": "Login",
-      "subtitle": "Welcome back! Please enter your details.",
+      "subtitle": "Sign in with one of the available OAuth providers.",
       "submit": "Login",
       "forgotPassword": "Forgot your password?",
       "noAccount": "Don't have an account?",
-      "signUp": "Sign up"
+      "signUp": "Sign up",
+      "signedInAs": "Signed in as"
     },
     "register": {
       "title": "Register",
@@ -28,15 +29,8 @@
       "signIn": "Log in",
       "submit": "Register"
     },
-    "forgotPassword": {
-      "title": "Recover password",
-      "subtitle": "To reset your password, please follow the link provided in this email.",
-      "submit": "Send"
-    },
-    "resetPassword": {
-      "title": "Reset Password",
-      "subtitle": "Enter your new password",
-      "submit": "Change Password"
+    "logout": {
+      "title": "Log out"
     }
   },
   "LanguageSwitcher": {
