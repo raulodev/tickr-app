@@ -73,6 +73,12 @@ FROM node:${NODE_VERSION} AS runner
 # Set working directory
 WORKDIR /app
 
+USER root
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends curl \
+    && rm -rf /var/lib/apt/lists/*
+
 # Set production environment variables
 ENV NODE_ENV=production
 ENV PORT=3000
