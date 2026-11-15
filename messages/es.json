@@ -1,18 +1,5 @@
 {
   "auth": {
-    "validation": {
-      "email": "Ingresa un correo electrónico válido.",
-      "passwordMin": "La contraseña debe tener al menos 8 caracteres.",
-      "name": "El nombre es requerido",
-      "tenantName": "El nombre de organización es requerida",
-      "link": "Enlace no válido. No se pudo procesar la solicitud de recuperación de contraseña."
-    },
-    "fields": {
-      "email": "Correo Electrónico",
-      "password": "Contraseña",
-      "name": "Nombre",
-      "tenantName": "Organización"
-    },
     "login": {
       "title": "Iniciar sesión",
       "subtitle": "Inicia sesión con uno de los proveedores OAuth disponibles.",
@@ -21,13 +8,6 @@
       "noAccount": "¿No tienes una cuenta?",
       "signUp": "Regístrate",
       "signedInAs": "Sesión iniciada como"
-    },
-    "register": {
-      "title": "Registrar",
-      "subtitle": "Crear una cuenta",
-      "haveAccount": "¿Ya tienes una cuenta?",
-      "signIn": "Inicia sesión",
-      "submit": "Registrar"
     },
     "logout": {
       "title": "Cerrar sesión"

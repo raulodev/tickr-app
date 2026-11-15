@@ -1,18 +1,5 @@
 {
   "auth": {
-    "validation": {
-      "email": "Enter a valid email address.",
-      "passwordMin": "Password must be at least 8 characters.",
-      "name": "The name is required",
-      "tenantName": "The organization is required",
-      "link": "Invalid link. The password recovery request could not be processed."
-    },
-    "fields": {
-      "email": "Email",
-      "password": "Password",
-      "name": "Name",
-      "tenantName": "Organization"
-    },
     "login": {
       "title": "Login",
       "subtitle": "Sign in with one of the available OAuth providers.",
@@ -21,13 +8,6 @@
       "noAccount": "Don't have an account?",
       "signUp": "Sign up",
       "signedInAs": "Signed in as"
-    },
-    "register": {
-      "title": "Register",
-      "subtitle": "Create a new account",
-      "haveAccount": "Already have an account?",
-      "signIn": "Log in",
-      "submit": "Register"
     },
     "logout": {
       "title": "Log out"
