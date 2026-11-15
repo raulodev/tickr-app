@@ -19,6 +19,9 @@ const handler = NextAuth({
 
   callbacks: {
     async signIn({ user, account }) {
+      console.log("user:", user);
+      console.log("account", account);
+
       if (!user.email) return false;
 
       const data: LoginDto = {
@@ -35,11 +38,12 @@ const handler = NextAuth({
       try {
         const result = await authControllerLogin(data);
         await setAuthCookie(result.access_token, result.refresh_token);
+        return true;
       } catch (error) {
         console.error(error);
         return false;
       }
-      return true;
+      return false;
     },
   },
   secret: process.env.NEXTAUTH_SECRET,
