@@ -36,14 +36,16 @@ const handler = NextAuth({
       }
 
       try {
-        const result = await authControllerLogin(data);
+        const result = await authControllerLogin(data, {
+          baseURL:
+            process.env.INTERNAL_API_URL ?? process.env.NEXT_PUBLIC_API_URL,
+        });
         await setAuthCookie(result.access_token, result.refresh_token);
         return true;
       } catch (error) {
         console.error(error);
         return false;
       }
-      return false;
     },
   },
   secret: process.env.NEXTAUTH_SECRET,
