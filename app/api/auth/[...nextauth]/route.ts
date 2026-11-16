@@ -19,9 +19,6 @@ const handler = NextAuth({
 
   callbacks: {
     async signIn({ user, account }) {
-      console.log("user:", user);
-      console.log("account", account);
-
       if (!user.email) return false;
 
       const data: LoginDto = {
