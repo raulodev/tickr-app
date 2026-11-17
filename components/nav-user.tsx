@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/sidebar";
 import { getAvatarFallback } from "@/lib/utils";
 import { signOut } from "next-auth/react";
+import { useTranslations } from "next-intl";
 
 export function NavUser({
   user,
@@ -29,6 +30,7 @@ export function NavUser({
   };
 }) {
   const { isMobile } = useSidebar();
+  const t = useTranslations("auth");
 
   return (
     <SidebarMenu>
@@ -75,7 +77,7 @@ export function NavUser({
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => signOut()}>
               <LogOut />
-              Log out
+              {t("logout.title")}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
