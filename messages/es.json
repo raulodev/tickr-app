@@ -14,7 +14,10 @@
     }
   },
   "dashboard": {
-    "loading": "Cargando..."
+    "loading": "Cargando...",
+    "home": {
+      "welcome": "Bienvenido de nuevo, {name}"
+    }
   },
   "LanguageSwitcher": {
     "label": "Selecciona idioma",
