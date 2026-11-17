@@ -22,3 +22,9 @@ export async function setAuthCookie(accessToken: string, refreshToken: string) {
     maxAge: 60 * 60 * 24 * 30,
   });
 }
+
+export async function removeAuthCookies() {
+  const cookieStore = await cookies();
+  cookieStore.delete("accessToken");
+  cookieStore.delete("refreshToken");
+}

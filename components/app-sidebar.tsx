@@ -1,29 +1,22 @@
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarFooter,
-  SidebarGroup,
-  SidebarGroupAction,
-  SidebarGroupContent,
-  SidebarGroupLabel,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-} from "@/components/ui/sidebar";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
-import { ChevronDown, Plus, User2 } from "lucide-react";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "./ui/collapsible";
+import { Sidebar, SidebarFooter } from "@/components/ui/sidebar";
+
+import { useSession } from "next-auth/react";
+import { NavUser } from "./nav-user";
 
 export function AppSidebar() {
-  return <Sidebar></Sidebar>;
+  const { data } = useSession();
+
+  return (
+    <Sidebar>
+      <SidebarFooter>
+        <NavUser
+          user={{
+            name: data?.user?.name as string,
+            avatar: data?.user?.image as string,
+            email: data?.user?.email as string,
+          }}
+        />
+      </SidebarFooter>
+    </Sidebar>
+  );
 }

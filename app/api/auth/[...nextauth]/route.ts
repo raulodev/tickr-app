@@ -1,8 +1,8 @@
+import { removeAuthCookies, setAuthCookie } from "@/features/auth/actions";
+import { authControllerLogin, authControllerLogout } from "@/generated/api";
+import { LoginDto } from "@/generated/api/model";
 import NextAuth from "next-auth";
 import GithubProvider from "next-auth/providers/github";
-import { authControllerLogin } from "@/generated/api";
-import { LoginDto } from "@/generated/api/model";
-import { setAuthCookie } from "@/features/auth/actions";
 
 const handler = NextAuth({
   providers: [
@@ -15,6 +15,25 @@ const handler = NextAuth({
     signIn: "/login",
     signOut: "/",
     error: "/login",
+  },
+  events: {
+    async signOut({ token }) {
+      try {
+        await authControllerLogout(
+          {
+            refreshToken: (token as typeof token & { refreshToken: string })
+              .refreshToken,
+          },
+          {
+            baseURL:
+              process.env.INTERNAL_API_URL ?? process.env.NEXT_PUBLIC_API_URL,
+          },
+        );
+      } catch (error) {
+        console.error("Failed logout:", error);
+      }
+      await removeAuthCookies();
+    },
   },
   callbacks: {
     async signIn({ user, account }) {
@@ -37,7 +56,11 @@ const handler = NextAuth({
             process.env.INTERNAL_API_URL ?? process.env.NEXT_PUBLIC_API_URL,
         });
         await setAuthCookie(result.access_token, result.refresh_token);
-        Object.assign(user, { accessToken: result.access_token });
+        Object.assign(user, {
+          accessToken: result.access_token,
+          refreshToken: result.refresh_token,
+          organizations: result.organizations,
+        });
         return true;
       } catch (error) {
         console.error(error);
@@ -47,8 +70,13 @@ const handler = NextAuth({
     async jwt({ user, token }) {
       if (user) {
         token = {
-          accessToken: (user as typeof user & { accessToken?: string })
-            .accessToken,
+          accessToken: (
+            user as typeof user & {
+              accessToken?: string;
+            }
+          ).accessToken,
+          refreshToken: (user as typeof user & { refreshToken?: string })
+            .refreshToken,
         };
       }
       return token;
