@@ -29,7 +29,8 @@ import type {
   ChangeRoleDto,
   CreateTenantDto,
   CreateTenantResponseDto,
-  TenantMemberResponseDto
+  TenantMemberResponseDto,
+  TenantOrganizationResponseDto
 } from '../model';
 
 import { customInstance } from '../../../lib/api/axios-instance';
@@ -116,7 +117,93 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       > => {
       return useMutation(getTenantControllerCreateMutationOptions(options), queryClient);
     }
-    export const tenantControllerListMembers = (
+    export const tenantControllerList = (
+
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+
+
+      return customInstance<TenantOrganizationResponseDto[]>(
+      {url: `/api/tenants`, method: 'GET', signal
+    },
+      options);
+    }
+
+
+
+
+export const getTenantControllerListQueryKey = () => {
+    return [
+    `/api/tenants`
+    ] as const;
+    }
+
+
+export const getTenantControllerListQueryOptions = <TData = Awaited<ReturnType<typeof tenantControllerList>>, TError = ErrorType<ApiErrorResponseDto>>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof tenantControllerList>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getTenantControllerListQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof tenantControllerList>>> = ({ signal }) => tenantControllerList(requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof tenantControllerList>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type TenantControllerListQueryResult = NonNullable<Awaited<ReturnType<typeof tenantControllerList>>>
+export type TenantControllerListQueryError = ErrorType<ApiErrorResponseDto>
+
+
+export function useTenantControllerList<TData = Awaited<ReturnType<typeof tenantControllerList>>, TError = ErrorType<ApiErrorResponseDto>>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof tenantControllerList>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof tenantControllerList>>,
+          TError,
+          Awaited<ReturnType<typeof tenantControllerList>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useTenantControllerList<TData = Awaited<ReturnType<typeof tenantControllerList>>, TError = ErrorType<ApiErrorResponseDto>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof tenantControllerList>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof tenantControllerList>>,
+          TError,
+          Awaited<ReturnType<typeof tenantControllerList>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useTenantControllerList<TData = Awaited<ReturnType<typeof tenantControllerList>>, TError = ErrorType<ApiErrorResponseDto>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof tenantControllerList>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useTenantControllerList<TData = Awaited<ReturnType<typeof tenantControllerList>>, TError = ErrorType<ApiErrorResponseDto>>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof tenantControllerList>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getTenantControllerListQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+export const tenantControllerListMembers = (
 
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {
