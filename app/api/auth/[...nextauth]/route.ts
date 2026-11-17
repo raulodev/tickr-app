@@ -16,7 +16,6 @@ const handler = NextAuth({
     signOut: "/",
     error: "/login",
   },
-
   callbacks: {
     async signIn({ user, account }) {
       if (!user.email) return false;
@@ -38,11 +37,26 @@ const handler = NextAuth({
             process.env.INTERNAL_API_URL ?? process.env.NEXT_PUBLIC_API_URL,
         });
         await setAuthCookie(result.access_token, result.refresh_token);
+        Object.assign(user, { accessToken: result.access_token });
         return true;
       } catch (error) {
         console.error(error);
         return false;
       }
+    },
+    async jwt({ user, token }) {
+      if (user) {
+        token = {
+          accessToken: (user as typeof user & { accessToken?: string })
+            .accessToken,
+        };
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      (session as typeof session & { accessToken?: string }).accessToken =
+        token.accessToken as string | undefined;
+      return session;
     },
   },
   secret: process.env.NEXTAUTH_SECRET,
