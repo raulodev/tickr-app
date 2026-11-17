@@ -35,7 +35,7 @@ export function LoginForm() {
           </>
         ) : (
           <>
-            <Button onClick={() => signIn("github")}>
+            <Button onClick={() => signIn("github")} className="w-full">
               <GithubIcon />
               Github
             </Button>
