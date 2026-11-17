@@ -1,19 +1,63 @@
-import { Sidebar, SidebarFooter } from "@/components/ui/sidebar";
+import {
+  Sidebar,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+} from "@/components/ui/sidebar";
 
 import { useSession } from "next-auth/react";
 import { NavUser } from "./nav-user";
+import { useTranslations } from "next-intl";
+import { HomeIcon, FolderIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export function AppSidebar() {
-  const { data } = useSession();
+  const { data: session } = useSession();
+  const t = useTranslations("AppSidebar");
+  const router = useRouter();
+
+  const data = [
+    {
+      title: t("home"),
+      url: "/dashboard",
+      icon: HomeIcon,
+    },
+    {
+      title: t("projects"),
+      url: "/dashboard/projects",
+      icon: FolderIcon,
+    },
+  ];
 
   return (
     <Sidebar>
+      <SidebarGroup>
+        <SidebarGroupContent className="flex flex-col gap-2">
+          <SidebarMenu>
+            {data.map((item) => (
+              <SidebarMenuItem key={item.title}>
+                <SidebarMenuButton
+                  tooltip={item.title}
+                  onClick={() => router.push(item.url)}
+                >
+                  {item.icon && <item.icon />}
+                  <span>{item.title}</span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            ))}
+          </SidebarMenu>
+        </SidebarGroupContent>
+      </SidebarGroup>
+
       <SidebarFooter>
         <NavUser
           user={{
-            name: data?.user?.name as string,
-            avatar: data?.user?.image as string,
-            email: data?.user?.email as string,
+            name: session?.user?.name as string,
+            avatar: session?.user?.image as string,
+            email: session?.user?.email as string,
           }}
         />
       </SidebarFooter>

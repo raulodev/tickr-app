@@ -28,5 +28,9 @@
     "dark": "Dark",
     "light": "Light",
     "system": "System"
+  },
+  "AppSidebar": {
+    "home": "Home",
+    "projects": "Projects"
   }
 }

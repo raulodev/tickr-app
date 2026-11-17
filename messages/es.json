@@ -28,5 +28,9 @@
     "dark": "Oscuro",
     "light": "Claro",
     "system": "Sistema"
+  },
+  "AppSidebar": {
+    "home": "Inicio",
+    "projects": "Proyectos"
   }
 }
