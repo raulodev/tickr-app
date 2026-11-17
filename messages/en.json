@@ -32,5 +32,10 @@
   "AppSidebar": {
     "home": "Home",
     "projects": "Projects"
+  },
+  "OrganizationSwitcher": {
+    "ADMIN": "Admin",
+    "MEMBER": "Member",
+    "organizations": "Organizations"
   }
 }

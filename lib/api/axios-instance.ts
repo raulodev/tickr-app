@@ -1,7 +1,10 @@
 import Axios, { type AxiosError, type AxiosRequestConfig } from "axios";
 
 export const AXIOS_INSTANCE = Axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  baseURL:
+    typeof window === "undefined"
+      ? (process.env.INTERNAL_API_URL ?? process.env.NEXT_PUBLIC_API_URL)
+      : "/api/backend",
 });
 
 AXIOS_INSTANCE.interceptors.response.use(

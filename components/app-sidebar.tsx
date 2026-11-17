@@ -4,6 +4,7 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
+  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -14,6 +15,7 @@ import { NavUser } from "./nav-user";
 import { useTranslations } from "next-intl";
 import { HomeIcon, FolderIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { OrganizationSwitcher } from "./organization-switcher";
 
 export function AppSidebar() {
   const { data: session } = useSession();
@@ -35,6 +37,9 @@ export function AppSidebar() {
 
   return (
     <Sidebar>
+      <SidebarHeader>
+        <OrganizationSwitcher />
+      </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupContent className="flex flex-col gap-2">
@@ -54,7 +59,6 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-
       <SidebarFooter>
         <NavUser
           user={{
