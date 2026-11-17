@@ -13,6 +13,9 @@
       "title": "Cerrar sesión"
     }
   },
+  "dashboard": {
+    "loading": "Cargando..."
+  },
   "LanguageSwitcher": {
     "label": "Selecciona idioma",
     "english": "Inglés",

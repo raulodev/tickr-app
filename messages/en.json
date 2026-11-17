@@ -13,6 +13,9 @@
       "title": "Log out"
     }
   },
+  "dashboard": {
+    "loading": "Loading..."
+  },
   "LanguageSwitcher": {
     "label": "Select language",
     "english": "English",
