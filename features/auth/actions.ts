@@ -11,7 +11,7 @@ export async function setAuthCookie(accessToken: string, refreshToken: string) {
     secure: secure,
     sameSite: "lax",
     path: "/",
-    maxAge: 60 * 60 * 24 * 7,
+    maxAge: 60 * 15,
   });
 
   cookieStore.set("refreshToken", refreshToken, {
@@ -19,6 +19,6 @@ export async function setAuthCookie(accessToken: string, refreshToken: string) {
     secure: secure,
     sameSite: "lax",
     path: "/",
-    maxAge: 60 * 60 * 24 * 7,
+    maxAge: 60 * 60 * 24 * 30,
   });
 }
