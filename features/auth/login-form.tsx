@@ -18,7 +18,7 @@ export function LoginForm() {
   const { data: session } = useSession();
 
   return (
-    <Card className="w-full sm:max-w-md">
+    <Card className="w-full min-w-xs sm:min-w-md max-w-md">
       <CardHeader>
         <CardTitle>{t("login.title")}</CardTitle>
         <CardDescription>{t("login.subtitle")}</CardDescription>
