@@ -33,7 +33,7 @@ const activeTenant = (
   if (!tenants || !me)
     return {
       id: "",
-      name: "Default",
+      name: "",
       role: "ADMIN",
       slug: "",
     };

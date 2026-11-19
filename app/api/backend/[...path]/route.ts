@@ -2,29 +2,38 @@ import { cookies } from "next/headers";
 import { NextResponse, type NextRequest } from "next/server";
 
 const API_URL = process.env.INTERNAL_API_URL ?? process.env.NEXT_PUBLIC_API_URL;
+
 const FORWARDED_HEADERS = ["accept", "content-type"];
 
-async function proxy(request: NextRequest, context: RouteContext<"/api/backend/[...path]">) {
+async function proxy(
+  request: NextRequest,
+  context: RouteContext<"/api/backend/[...path]">,
+) {
   if (!API_URL) {
-    return NextResponse.json({ message: "API URL is not configured" }, { status: 500 });
+    return NextResponse.json(
+      { message: "API URL is not configured" },
+      { status: 500 },
+    );
   }
 
   const { path } = await context.params;
-  const token = (await cookies()).get("accessToken")?.value;
+  const accessToken = (await cookies()).get("accessToken")?.value;
   const headers = new Headers();
 
   for (const header of FORWARDED_HEADERS) {
     const value = request.headers.get(header);
     if (value) headers.set(header, value);
   }
-  if (token) headers.set("authorization", `Bearer ${token}`);
+  if (accessToken) headers.set("authorization", `Bearer ${accessToken}`);
 
   const url = new URL(path.join("/"), API_URL);
+
   url.search = request.nextUrl.search;
   const body =
     request.method === "GET" || request.method === "HEAD"
       ? undefined
       : await request.arrayBuffer();
+
   const response = await fetch(url, {
     method: request.method,
     headers,

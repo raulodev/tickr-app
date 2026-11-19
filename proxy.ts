@@ -4,12 +4,14 @@ const PUBLIC_PATHS = ["/login"];
 
 export function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
-  const hasToken = req.cookies.has("accessToken");
+  const hasAccessTokenToken = req.cookies.has("accessToken");
+  const hasRefreshToken = req.cookies.has("refreshToken");
+
   const isPublic = PUBLIC_PATHS.some((p) => pathname.startsWith(p));
 
-  if (!hasToken && !isPublic)
+  if (!hasAccessTokenToken && !isPublic && !hasRefreshToken)
     return NextResponse.redirect(new URL("/login", req.url));
-  if (hasToken && pathname.startsWith("/login"))
+  if (hasAccessTokenToken && pathname.startsWith("/login"))
     return NextResponse.redirect(new URL("/dashboard", req.url));
   return NextResponse.next();
 }
