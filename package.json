@@ -16,6 +16,7 @@
     "class-variance-authority": "^0.7.1",
     "cn": "^0.5.2",
     "i": "^0.3.7",
+    "jwt-decode": "^4.0.0",
     "lucide-react": "^1.67.0",
     "next": "16.4.6",
     "next-auth": "^4.24.15",
