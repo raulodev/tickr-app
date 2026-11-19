@@ -36,6 +36,7 @@
   "OrganizationSwitcher": {
     "ADMIN": "Administrador",
     "MEMBER": "Miembro",
-    "organizations": "Organizaciones"
+    "organizations": "Organizaciones",
+    "addOrg": "Agregar organización"
   }
 }
