@@ -19,6 +19,19 @@
       "welcome": "Welcome back, {name}"
     }
   },
+  "tenant": {
+    "add": "Add",
+    "dialog": {
+      "title": "Add Organization",
+      "orgCreated": "Organization {name} created"
+    },
+    "fields": {
+      "name": "Name"
+    },
+    "validation": {
+      "name": "The name is required"
+    }
+  },
   "LanguageSwitcher": {
     "label": "Select language",
     "english": "English",

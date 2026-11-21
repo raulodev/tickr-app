@@ -17,14 +17,17 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 
-import { useTenantControllerList, useAuthControllerMe } from "@/generated/api";
+import { TenantDialog } from "@/features/tenant/tenant-dialog";
+
+import { useAuthControllerMe, useTenantControllerList } from "@/generated/api";
 import type {
-  TenantOrganizationResponseDto,
   AuthUserResponseDto,
+  TenantOrganizationResponseDto,
 } from "@/generated/api/model";
+import logo from "@/public/logo.webp";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
-import logo from "@/public/logo.webp";
+import { useState } from "react";
 
 const activeTenant = (
   tenants: TenantOrganizationResponseDto[] | undefined,
@@ -46,8 +49,9 @@ const activeTenant = (
 export function OrganizationSwitcher() {
   const t = useTranslations("OrganizationSwitcher");
   const { isMobile } = useSidebar();
+  const [isTenantDialogOpen, setIsTenantDialogOpen] = useState(false);
 
-  const { data: tenants } = useTenantControllerList();
+  const { data: tenants, refetch } = useTenantControllerList();
   const { data: me } = useAuthControllerMe();
 
   const currentTenant = activeTenant(tenants, me);
@@ -89,14 +93,26 @@ export function OrganizationSwitcher() {
               </DropdownMenuItem>
             ))}
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="gap-2 p-2">
+            <DropdownMenuItem
+              className="gap-2 p-2"
+              onClick={() => setIsTenantDialogOpen(true)}
+            >
               <div className="flex size-6 items-center justify-center rounded-md border bg-transparent">
                 <Plus className="size-4" />
               </div>
-              <div className="font-medium text-muted-foreground">Add team</div>
+              <div className="font-medium text-muted-foreground">
+                {t("addOrg")}
+              </div>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
+        <TenantDialog
+          open={isTenantDialogOpen}
+          onOpenChange={setIsTenantDialogOpen}
+          onTenantCreated={async () => {
+            await refetch();
+          }}
+        />
       </SidebarMenuItem>
     </SidebarMenu>
   );
