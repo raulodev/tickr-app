@@ -19,7 +19,11 @@ import {
 
 import { TenantDialog } from "@/features/tenant/tenant-dialog";
 
-import { useAuthControllerMe, useTenantControllerList } from "@/generated/api";
+import {
+  useAuthControllerMe,
+  useAuthControllerSwitchTenant,
+  useTenantControllerList,
+} from "@/generated/api";
 import type {
   AuthUserResponseDto,
   TenantOrganizationResponseDto,
@@ -27,7 +31,9 @@ import type {
 import logo from "@/public/logo.webp";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { setAuthCookie } from "@/features/auth/actions";
 
 const activeTenant = (
   tenants: TenantOrganizationResponseDto[] | undefined,
@@ -48,13 +54,31 @@ const activeTenant = (
 
 export function OrganizationSwitcher() {
   const t = useTranslations("OrganizationSwitcher");
+  const router = useRouter();
   const { isMobile } = useSidebar();
   const [isTenantDialogOpen, setIsTenantDialogOpen] = useState(false);
 
-  const { data: tenants, refetch } = useTenantControllerList();
-  const { data: me } = useAuthControllerMe();
+  const { data: tenants, refetch: refetchTenants } = useTenantControllerList();
+  const { data: me, refetch: refetchMe } = useAuthControllerMe();
+  const { mutateAsync } = useAuthControllerSwitchTenant();
 
   const currentTenant = activeTenant(tenants, me);
+
+  async function onChangeTenant(tenantId: string) {
+    if (tenantId === currentTenant.id) return;
+
+    const result = await mutateAsync({
+      data: {
+        tenantId: tenantId,
+      },
+    });
+
+    // Guardar el nuevo access token (el tenantId viaja dentro del JWT).
+    await setAuthCookie(result.access_token);
+
+    await Promise.all([refetchMe(), refetchTenants()]);
+    router.refresh();
+  }
 
   return (
     <SidebarMenu>
@@ -88,7 +112,11 @@ export function OrganizationSwitcher() {
             </DropdownMenuItem>
 
             {tenants?.map((item) => (
-              <DropdownMenuItem className="gap-2 p-2" key={item.id}>
+              <DropdownMenuItem
+                className="gap-2 p-2"
+                key={item.id}
+                onClick={() => onChangeTenant(item.id)}
+              >
                 {item.name}
               </DropdownMenuItem>
             ))}
@@ -110,7 +138,7 @@ export function OrganizationSwitcher() {
           open={isTenantDialogOpen}
           onOpenChange={setIsTenantDialogOpen}
           onTenantCreated={async () => {
-            await refetch();
+            await refetchTenants();
           }}
         />
       </SidebarMenuItem>
