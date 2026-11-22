@@ -33,6 +33,7 @@
       "name": "The name is required"
     },
     "members": {
+      "title": "Members",
       "name": "Name",
       "email": "Email",
       "role": "Role",
@@ -42,6 +43,18 @@
       "loading": "Loading members...",
       "empty": "No members found",
       "error": "Could not load the members. Please try again.",
+      "add": {
+        "title": "Add member",
+        "description": "Invite a user by email and choose the role they will have in the organization.",
+        "submit": "Add member",
+        "cancel": "Cancel",
+        "success": "Member {email} added",
+        "failed": "Could not add the member. Please try again.",
+        "validation": {
+          "email": "Enter a valid email address",
+          "role": "Select a role"
+        }
+      },
       "remove": {
         "title": "Remove member",
         "description": "This member will lose access to the organization. This action cannot be undone.",

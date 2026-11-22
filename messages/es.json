@@ -33,6 +33,7 @@
       "name": "El nombre es requerido"
     },
     "members": {
+      "title": "Miembros",
       "name": "Nombre",
       "email": "Correo",
       "role": "Rol",
@@ -42,6 +43,18 @@
       "loading": "Cargando miembros...",
       "empty": "No hay miembros",
       "error": "No se pudieron cargar los miembros. Inténtalo de nuevo.",
+      "add": {
+        "title": "Agregar miembro",
+        "description": "Invita a un usuario por correo y elige el rol que tendrá en la organización.",
+        "submit": "Agregar miembro",
+        "cancel": "Cancelar",
+        "success": "Miembro {email} agregado",
+        "failed": "No se pudo agregar al miembro. Inténtalo de nuevo.",
+        "validation": {
+          "email": "Ingresa un correo válido",
+          "role": "Selecciona un rol"
+        }
+      },
       "remove": {
         "title": "Eliminar miembro",
         "description": "Este miembro perderá el acceso a la organización. Esta acción no se puede deshacer.",

@@ -38,7 +38,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <SidebarProvider>
       <AppSidebar />
       <main className="w-full p-4">
-        <NavigationMenu className="w-full max-w-none">
+        <NavigationMenu className="w-full max-w-none mb-4">
           <NavigationMenuList className="gap-2">
             <NavigationMenuItem>
               <SidebarTrigger />
