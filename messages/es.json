@@ -55,6 +55,13 @@
           "role": "Selecciona un rol"
         }
       },
+      "edit": {
+        "title": "Editar miembro",
+        "description": "Cambia el rol que tendrá este miembro en la organización.",
+        "submit": "Guardar cambios",
+        "success": "Rol del miembro actualizado",
+        "failed": "No se pudo actualizar el rol. Inténtalo de nuevo."
+      },
       "remove": {
         "title": "Eliminar miembro",
         "description": "Este miembro perderá el acceso a la organización. Esta acción no se puede deshacer.",

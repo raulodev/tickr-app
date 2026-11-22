@@ -55,6 +55,13 @@
           "role": "Select a role"
         }
       },
+      "edit": {
+        "title": "Edit member",
+        "description": "Change the role this member will have in the organization.",
+        "submit": "Save changes",
+        "success": "Member role updated",
+        "failed": "Could not update the role. Please try again."
+      },
       "remove": {
         "title": "Remove member",
         "description": "This member will lose access to the organization. This action cannot be undone.",

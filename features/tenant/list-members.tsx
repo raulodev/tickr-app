@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Crown, Trash2 } from "lucide-react";
+import { Crown, Pencil, Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -21,6 +21,7 @@ import {
 import { Role, TenantMemberResponseDto } from "@/generated/api/model";
 import { getAvatarFallback } from "@/lib/utils";
 import { DeleteTenantMemberDialog } from "./delete-tenant-member-dialog";
+import { TenantMemberDialog } from "./tenant-member-dialog";
 
 function roleWeight(role: TenantMemberResponseDto["role"]): number {
   return role === Role.ADMIN ? 0 : 1;
@@ -37,6 +38,8 @@ export function ListMembers() {
   const { data: me } = useAuthControllerMe();
 
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
+  const [editedMember, setEditedMember] =
+    useState<TenantMemberResponseDto | null>(null);
 
   const sortedMembers = [...(members ?? [])].sort(
     (a, b) => roleWeight(a.role) - roleWeight(b.role),
@@ -113,16 +116,27 @@ export function ListMembers() {
                   )}
                 </TableCell>
                 <TableCell className="text-right">
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon-sm"
-                    aria-label={t("remove.title")}
-                    onClick={() => setSelectedUserId(member.userId)}
-                    disabled={member.userId === me?.sub}
-                  >
-                    <Trash2 className="text-destructive" aria-hidden />
-                  </Button>
+                  <div className="flex items-center justify-end gap-1">
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon-sm"
+                      aria-label={t("edit.title")}
+                      onClick={() => setEditedMember(member)}
+                    >
+                      <Pencil aria-hidden />
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon-sm"
+                      aria-label={t("remove.title")}
+                      onClick={() => setSelectedUserId(member.userId)}
+                      disabled={member.userId === me?.sub}
+                    >
+                      <Trash2 className="text-destructive" aria-hidden />
+                    </Button>
+                  </div>
                 </TableCell>
               </TableRow>
             );
@@ -138,6 +152,17 @@ export function ListMembers() {
             if (!open) setSelectedUserId(null);
           }}
           onTenantMemberDeleted={() => refetch()}
+        />
+      )}
+
+      {editedMember && (
+        <TenantMemberDialog
+          open
+          member={editedMember}
+          onOpenChange={(open) => {
+            if (!open) setEditedMember(null);
+          }}
+          onTenantMemberUpdated={() => refetch()}
         />
       )}
     </>

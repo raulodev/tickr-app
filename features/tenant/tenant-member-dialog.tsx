@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { DialogRootChangeEventDetails } from "@base-ui/react/dialog";
 import { isAxiosError } from "axios";
 import { useTranslations } from "next-intl";
+import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -26,8 +27,15 @@ import {
 } from "@/components/ui/select";
 import { Spinner } from "@/components/ui/spinner";
 import { toast } from "@/components/ui/toast";
-import { useTenantControllerAddMember } from "@/generated/api";
-import { ApiErrorResponseDto, Role } from "@/generated/api/model";
+import {
+  useTenantControllerAddMember,
+  useTenantControllerChangeRole,
+} from "@/generated/api";
+import {
+  ApiErrorResponseDto,
+  Role,
+  TenantMemberResponseDto,
+} from "@/generated/api/model";
 import { getMessageError } from "@/lib/utils";
 
 const schema = z.object({
@@ -43,15 +51,21 @@ interface Props {
     open: boolean,
     eventDetails?: DialogRootChangeEventDetails,
   ) => void;
+  /** Si se recibe un miembro, el diálogo edita su rol en lugar de agregarlo. */
+  member?: TenantMemberResponseDto;
   onTenantMemberCreated?: () => void;
+  onTenantMemberUpdated?: () => void;
 }
 
 export function TenantMemberDialog({
   open,
   onOpenChange,
+  member,
   onTenantMemberCreated,
+  onTenantMemberUpdated,
 }: Props) {
   const t = useTranslations("tenant.members");
+  const isEditing = Boolean(member?.userId);
   const {
     register,
     control,
@@ -62,7 +76,22 @@ export function TenantMemberDialog({
     resolver: zodResolver(schema),
     defaultValues: { email: "", role: Role.MEMBER },
   });
-  const { mutateAsync, isPending } = useTenantControllerAddMember();
+  const { mutateAsync: addMember, isPending: isAdding } =
+    useTenantControllerAddMember();
+  const { mutateAsync: changeRole, isPending: isChangingRole } =
+    useTenantControllerChangeRole();
+  const isPending = isEditing ? isChangingRole : isAdding;
+
+  // Al abrir, el formulario se llena con el miembro a editar o queda vacío
+  // para agregar uno nuevo (el input de correo va oculto al editar).
+  useEffect(() => {
+    if (!open) return;
+
+    reset({
+      email: member?.email ?? "",
+      role: member?.role ?? Role.MEMBER,
+    });
+  }, [open, member, reset]);
 
   const roleItems = [
     { value: Role.ADMIN, label: t("ADMIN") },
@@ -74,7 +103,7 @@ export function TenantMemberDialog({
     eventDetails?: DialogRootChangeEventDetails,
   ) {
     if (!nextOpen) {
-      reset();
+      reset({ email: "", role: Role.MEMBER });
     }
 
     onOpenChange(nextOpen, eventDetails);
@@ -82,15 +111,31 @@ export function TenantMemberDialog({
 
   async function onSubmit(values: FormValues) {
     try {
-      await mutateAsync({ data: values });
+      if (member?.userId) {
+        await changeRole({
+          userId: member.userId,
+          data: { role: values.role },
+        });
 
-      toast.add({
-        type: "success",
-        description: t("add.success", { email: values.email }),
-      });
+        toast.add({
+          type: "success",
+          description: t("edit.success"),
+        });
 
-      if (onTenantMemberCreated) {
-        onTenantMemberCreated();
+        if (onTenantMemberUpdated) {
+          onTenantMemberUpdated();
+        }
+      } else {
+        await addMember({ data: values });
+
+        toast.add({
+          type: "success",
+          description: t("add.success", { email: values.email }),
+        });
+
+        if (onTenantMemberCreated) {
+          onTenantMemberCreated();
+        }
       }
 
       handleOpenChange(false);
@@ -101,7 +146,10 @@ export function TenantMemberDialog({
 
       toast.add({
         type: "error",
-        description: getMessageError(error?.response?.data, t("add.failed")),
+        description: getMessageError(
+          error?.response?.data,
+          t(isEditing ? "edit.failed" : "add.failed"),
+        ),
         priority: "high",
       });
     }
@@ -112,27 +160,37 @@ export function TenantMemberDialog({
       <DialogContent className="sm:max-w-sm">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <DialogHeader>
-            <DialogTitle>{t("add.title")}</DialogTitle>
-            <DialogDescription>{t("add.description")}</DialogDescription>
+            <DialogTitle>
+              {t(isEditing ? "edit.title" : "add.title")}
+            </DialogTitle>
+            <DialogDescription>
+              {t(isEditing ? "edit.description" : "add.description")}
+            </DialogDescription>
           </DialogHeader>
 
-          <Input
-            id="member-email"
-            type="email"
-            autoComplete="email"
-            placeholder={t("email")}
-            aria-invalid={Boolean(errors.email)}
-            aria-describedby={errors.email ? "member-email-error" : undefined}
-            {...register("email")}
-          />
-          {errors.email && (
-            <p
-              id="member-email-error"
-              role="alert"
-              className="text-sm text-destructive"
-            >
-              {t("add.validation.email")}
-            </p>
+          {!isEditing && (
+            <>
+              <Input
+                id="member-email"
+                type="email"
+                autoComplete="email"
+                placeholder={t("email")}
+                aria-invalid={Boolean(errors.email)}
+                aria-describedby={
+                  errors.email ? "member-email-error" : undefined
+                }
+                {...register("email")}
+              />
+              {errors.email && (
+                <p
+                  id="member-email-error"
+                  role="alert"
+                  className="text-sm text-destructive"
+                >
+                  {t("add.validation.email")}
+                </p>
+              )}
+            </>
           )}
 
           <Controller
@@ -182,7 +240,7 @@ export function TenantMemberDialog({
               {t("add.cancel")}
             </Button>
             <Button type="submit" disabled={isSubmitting || isPending}>
-              {t("add.submit")}
+              {t(isEditing ? "edit.submit" : "add.submit")}
               {isPending && <Spinner data-icon="inline-start" />}
             </Button>
           </DialogFooter>
