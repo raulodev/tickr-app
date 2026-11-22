@@ -14,14 +14,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  useTenantControllerListMembers,
-  useAuthControllerMe,
-} from "@/generated/api";
+import { useTenantControllerListMembers } from "@/generated/api";
 import { Role, TenantMemberResponseDto } from "@/generated/api/model";
 import { getAvatarFallback } from "@/lib/utils";
 import { DeleteTenantMemberDialog } from "./delete-tenant-member-dialog";
 import { TenantMemberDialog } from "./tenant-member-dialog";
+import { useAppStore } from "@/stores/app";
 
 function roleWeight(role: TenantMemberResponseDto["role"]): number {
   return role === Role.ADMIN ? 0 : 1;
@@ -35,7 +33,7 @@ export function ListMembers() {
     isError,
     refetch,
   } = useTenantControllerListMembers();
-  const { data: me } = useAuthControllerMe();
+  const { currentUser } = useAppStore();
 
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
   const [editedMember, setEditedMember] =
@@ -115,29 +113,32 @@ export function ListMembers() {
                     <span className="text-muted-foreground">{t("MEMBER")}</span>
                   )}
                 </TableCell>
-                <TableCell className="text-right">
-                  <div className="flex items-center justify-end gap-1">
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="icon-sm"
-                      aria-label={t("edit.title")}
-                      onClick={() => setEditedMember(member)}
-                    >
-                      <Pencil aria-hidden />
-                    </Button>
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="icon-sm"
-                      aria-label={t("remove.title")}
-                      onClick={() => setSelectedUserId(member.userId)}
-                      disabled={member.userId === me?.sub}
-                    >
-                      <Trash2 className="text-destructive" aria-hidden />
-                    </Button>
-                  </div>
-                </TableCell>
+
+                {currentUser && currentUser.role === "ADMIN" && (
+                  <TableCell className="text-right">
+                    <div className="flex items-center justify-end gap-1">
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon-sm"
+                        aria-label={t("edit.title")}
+                        onClick={() => setEditedMember(member)}
+                      >
+                        <Pencil aria-hidden />
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon-sm"
+                        aria-label={t("remove.title")}
+                        onClick={() => setSelectedUserId(member.userId)}
+                        disabled={member.userId === currentUser?.id}
+                      >
+                        <Trash2 className="text-destructive" aria-hidden />
+                      </Button>
+                    </div>
+                  </TableCell>
+                )}
               </TableRow>
             );
           })}

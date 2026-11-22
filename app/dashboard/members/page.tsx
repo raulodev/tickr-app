@@ -9,20 +9,24 @@ import { Button } from "@/components/ui/button";
 import { ListMembers } from "@/features/tenant/list-members";
 import { TenantMemberDialog } from "@/features/tenant/tenant-member-dialog";
 import { getTenantControllerListMembersQueryKey } from "@/generated/api";
+import { useAppStore } from "@/stores/app";
 
 export default function Members() {
   const t = useTranslations("tenant.members");
   const queryClient = useQueryClient();
+  const { currentUser } = useAppStore();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between gap-2">
         <h1 className="font-heading text-lg font-medium">{t("title")}</h1>
-        <Button type="button" onClick={() => setIsDialogOpen(true)}>
-          <Plus aria-hidden />
-          {t("add.title")}
-        </Button>
+        {currentUser && currentUser.role === "ADMIN" && (
+          <Button type="button" onClick={() => setIsDialogOpen(true)}>
+            <Plus aria-hidden />
+            {t("add.title")}
+          </Button>
+        )}
       </div>
 
       <ListMembers />

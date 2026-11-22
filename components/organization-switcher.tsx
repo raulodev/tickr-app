@@ -19,6 +19,8 @@ import {
 
 import { TenantDialog } from "@/features/tenant/tenant-dialog";
 
+import { toast } from "@/components/ui/toast";
+import { setAuthCookie } from "@/features/auth/actions";
 import {
   useAuthControllerMe,
   useAuthControllerSwitchTenant,
@@ -29,15 +31,15 @@ import type {
   AuthUserResponseDto,
   TenantOrganizationResponseDto,
 } from "@/generated/api/model";
-import { toast } from "@/components/ui/toast";
+import logo from "@/public/logo.webp";
+import { useAppStore } from "@/stores/app";
 import { useQueryClient } from "@tanstack/react-query";
 import { isAxiosError } from "axios";
-import logo from "@/public/logo.webp";
+import { useSession } from "next-auth/react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { setAuthCookie } from "@/features/auth/actions";
+import { useEffect, useState } from "react";
 
 const EMPTY_TENANT: TenantOrganizationResponseDto = {
   id: "",
@@ -57,9 +59,7 @@ const activeTenant = (
 ): TenantOrganizationResponseDto => {
   if (!tenants || !me) return EMPTY_TENANT;
 
-  return (
-    tenants.find((item) => item.id === me.tenantId) ?? EMPTY_TENANT
-  );
+  return tenants.find((item) => item.id === me.tenantId) ?? EMPTY_TENANT;
 };
 
 export function OrganizationSwitcher() {
@@ -72,8 +72,25 @@ export function OrganizationSwitcher() {
   const { data: tenants, refetch: refetchTenants } = useTenantControllerList();
   const { data: me } = useAuthControllerMe();
   const { mutateAsync } = useAuthControllerSwitchTenant();
+  const { data: session } = useSession();
+  const setCurrentUser = useAppStore((state) => state.setCurrentUser);
 
   const currentTenant = activeTenant(tenants, me);
+
+  // Mantiene el usuario compartido en el store alineado con `me` y la sesión
+  // (también se actualiza al cambiar de organización, porque `me` cambia).
+  useEffect(() => {
+    if (!me) return;
+
+    setCurrentUser({
+      id: me.sub,
+      tenantId: me.tenantId,
+      role: me.role,
+      name: session?.user?.name ?? null,
+      email: session?.user?.email ?? null,
+      image: session?.user?.image ?? null,
+    });
+  }, [me, session, setCurrentUser]);
 
   async function onChangeTenant(tenantId: string) {
     if (tenantId === currentTenant.id) return;
