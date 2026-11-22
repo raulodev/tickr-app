@@ -3,7 +3,11 @@ import { NextResponse, type NextRequest } from "next/server";
 import { authControllerRefresh } from "@/generated/api";
 import { isAxiosError } from "axios";
 import { decodeTenantId } from "@/features/auth/actions";
-import { ACCESS_TOKEN_MAX_AGE, REFRESH_TOKEN_MAX_AGE } from "@/lib/constants";
+import {
+  CO0KIE_OPTIONS,
+  ACCESS_TOKEN_MAX_AGE,
+  REFRESH_TOKEN_MAX_AGE,
+} from "@/lib/constants";
 import type {
   ApiErrorResponseDto,
   AuthSessionResponseDto,
@@ -17,20 +21,12 @@ async function applyAuthCookies(
   session: AuthSessionResponseDto,
   currentTenantId?: string,
 ) {
-  const secure = process.env.NODE_ENV === "production";
-  const baseOptions = {
-    httpOnly: true,
-    secure,
-    sameSite: "lax" as const,
-    path: "/",
-  };
-
   response.cookies.set("accessToken", session.access_token, {
-    ...baseOptions,
+    ...CO0KIE_OPTIONS,
     maxAge: ACCESS_TOKEN_MAX_AGE,
   });
   response.cookies.set("refreshToken", session.refresh_token, {
-    ...baseOptions,
+    ...CO0KIE_OPTIONS,
     maxAge: REFRESH_TOKEN_MAX_AGE,
   });
 
@@ -39,7 +35,7 @@ async function applyAuthCookies(
 
   if (tenantId) {
     response.cookies.set("tenantId", tenantId, {
-      ...baseOptions,
+      ...CO0KIE_OPTIONS,
       maxAge: REFRESH_TOKEN_MAX_AGE,
     });
   }

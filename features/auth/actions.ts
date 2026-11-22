@@ -2,7 +2,11 @@
 
 import { cookies } from "next/headers";
 import { jwtDecode } from "jwt-decode";
-import { ACCESS_TOKEN_MAX_AGE, REFRESH_TOKEN_MAX_AGE } from "@/lib/constants";
+import {
+  CO0KIE_OPTIONS,
+  ACCESS_TOKEN_MAX_AGE,
+  REFRESH_TOKEN_MAX_AGE,
+} from "@/lib/constants";
 
 export async function setAuthCookie(
   accessToken: string,
@@ -10,22 +14,14 @@ export async function setAuthCookie(
 ) {
   const cookieStore = await cookies();
 
-  const secure = process.env.NODE_ENV === "production";
-
   cookieStore.set("accessToken", accessToken, {
-    httpOnly: true,
-    secure: secure,
-    sameSite: "lax",
-    path: "/",
+    ...CO0KIE_OPTIONS,
     maxAge: ACCESS_TOKEN_MAX_AGE,
   });
 
   if (refreshToken)
     cookieStore.set("refreshToken", refreshToken, {
-      httpOnly: true,
-      secure: secure,
-      sameSite: "lax",
-      path: "/",
+      ...CO0KIE_OPTIONS,
       maxAge: REFRESH_TOKEN_MAX_AGE,
     });
 
@@ -33,10 +29,7 @@ export async function setAuthCookie(
 
   if (tenantId)
     cookieStore.set("tenantId", tenantId, {
-      httpOnly: true,
-      secure: secure,
-      sameSite: "lax",
-      path: "/",
+      ...CO0KIE_OPTIONS,
       maxAge: REFRESH_TOKEN_MAX_AGE,
     });
 }
