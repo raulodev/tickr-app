@@ -104,9 +104,7 @@ export function ListMembers() {
                   {isAdmin ? (
                     <span className="font-medium">{t("ADMIN")}</span>
                   ) : (
-                    <span className="text-muted-foreground">
-                      {t("MEMBER")}
-                    </span>
+                    <span className="text-muted-foreground">{t("MEMBER")}</span>
                   )}
                 </TableCell>
                 <TableCell className="text-right">
