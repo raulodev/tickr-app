@@ -14,7 +14,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useTenantControllerListMembers } from "@/generated/api";
+import {
+  useTenantControllerListMembers,
+  useAuthControllerMe,
+} from "@/generated/api";
 import { Role, TenantMemberResponseDto } from "@/generated/api/model";
 import { getAvatarFallback } from "@/lib/utils";
 import { DeleteTenantMemberDialog } from "./delete-tenant-member-dialog";
@@ -31,6 +34,8 @@ export function ListMembers() {
     isError,
     refetch,
   } = useTenantControllerListMembers();
+  const { data: me } = useAuthControllerMe();
+
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
 
   const sortedMembers = [...(members ?? [])].sort(
@@ -114,6 +119,7 @@ export function ListMembers() {
                     size="icon-sm"
                     aria-label={t("remove.title")}
                     onClick={() => setSelectedUserId(member.userId)}
+                    disabled={member.userId === me?.sub}
                   >
                     <Trash2 className="text-destructive" aria-hidden />
                   </Button>
