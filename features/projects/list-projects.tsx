@@ -1,6 +1,6 @@
 "use client";
 
-import { CircleDot, MoreHorizontal, Trash2 } from "lucide-react";
+import { CircleDot, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import { useFormatter, useTranslations } from "next-intl";
 import { useState } from "react";
 
@@ -28,7 +28,9 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { DeleteProjectDialog } from "@/features/projects/delete-project-dialog";
+import { ProjectDialog } from "@/features/projects/project-dialog";
 import { useProjectControllerList } from "@/generated/api";
+import { ProjectResponseDto } from "@/generated/api/model";
 
 import { getPageItems } from "@/lib/utils";
 import { PAGE_SIZE } from "@/lib/constants";
@@ -45,6 +47,9 @@ export function ListProjects() {
     id: string;
     name: string;
   } | null>(null);
+  const [editedProject, setEditedProject] = useState<ProjectResponseDto | null>(
+    null,
+  );
 
   if (isPending) {
     return <p className="text-sm text-muted-foreground">{t("loading")}</p>;
@@ -77,6 +82,10 @@ export function ListProjects() {
                         <MoreHorizontal className="size-4" aria-hidden />
                       </MenubarTrigger>
                       <MenubarContent align="end" className="w-auto min-w-40">
+                        <MenubarItem onClick={() => setEditedProject(project)}>
+                          <Pencil aria-hidden />
+                          {t("dialog.edit.title")}
+                        </MenubarItem>
                         <MenubarItem
                           variant="destructive"
                           onClick={() =>
@@ -178,6 +187,19 @@ export function ListProjects() {
           </PaginationContent>
         </Pagination>
       )}
+
+      <ProjectDialog
+        open={editedProject !== null}
+        project={editedProject ?? undefined}
+        onOpenChange={(open) => {
+          if (!open) {
+            setEditedProject(null);
+          }
+        }}
+        onProjectUpdated={() => {
+          refetch();
+        }}
+      />
 
       <DeleteProjectDialog
         open={deletedProject !== null}
