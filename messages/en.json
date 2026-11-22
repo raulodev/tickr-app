@@ -1,4 +1,37 @@
 {
+  "landing": {
+    "nav": {
+      "login": "Sign in",
+      "dashboard": "Dashboard"
+    },
+    "hero": {
+      "badge": "Issue tracking, without the noise",
+      "title": "Keep your team's work in one place",
+      "description": "Tickr brings projects, issues and people together, so everyone knows what to pick up next.",
+      "signIn": "Continue with GitHub",
+      "dashboard": "Open dashboard",
+      "note": "Free to start. Sign in with your GitHub account."
+    },
+    "features": {
+      "title": "Built for small teams",
+      "description": "Everything you need to plan the work and keep it moving.",
+      "projects": {
+        "title": "Projects with keys",
+        "description": "Group issues by project and give each one a short key that keeps references easy to read."
+      },
+      "members": {
+        "title": "Organizations and roles",
+        "description": "Invite your teammates to an organization and choose who administers it."
+      },
+      "issues": {
+        "title": "Issues in context",
+        "description": "See how much work each project holds before deciding where to spend the day."
+      }
+    },
+    "footer": {
+      "tagline": "Tickr — issue tracking for small teams"
+    }
+  },
   "auth": {
     "login": {
       "title": "Login",

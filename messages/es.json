@@ -1,4 +1,37 @@
 {
+  "landing": {
+    "nav": {
+      "login": "Iniciar sesión",
+      "dashboard": "Panel"
+    },
+    "hero": {
+      "badge": "Seguimiento de issues sin ruido",
+      "title": "Todo el trabajo de tu equipo en un solo lugar",
+      "description": "Tickr reúne proyectos, issues y personas para que todos sepan qué hacer a continuación.",
+      "signIn": "Continuar con GitHub",
+      "dashboard": "Abrir el panel",
+      "note": "Empieza gratis. Inicia sesión con tu cuenta de GitHub."
+    },
+    "features": {
+      "title": "Pensado para equipos pequeños",
+      "description": "Todo lo necesario para planificar el trabajo y mantenerlo en marcha.",
+      "projects": {
+        "title": "Proyectos con clave",
+        "description": "Agrupa los issues por proyecto y asigna a cada uno una clave corta que facilite las referencias."
+      },
+      "members": {
+        "title": "Organizaciones y roles",
+        "description": "Invita a tu equipo a una organización y elige quién la administra."
+      },
+      "issues": {
+        "title": "Issues en contexto",
+        "description": "Consulta cuánto trabajo tiene cada proyecto antes de decidir dónde invertir el día."
+      }
+    },
+    "footer": {
+      "tagline": "Tickr — seguimiento de issues para equipos pequeños"
+    }
+  },
   "auth": {
     "login": {
       "title": "Iniciar sesión",

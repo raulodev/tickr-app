@@ -7,7 +7,8 @@ export function proxy(req: NextRequest) {
   const hasAccessTokenToken = req.cookies.has("accessToken");
   const hasRefreshToken = req.cookies.has("refreshToken");
 
-  const isPublic = PUBLIC_PATHS.some((p) => pathname.startsWith(p));
+  const isPublic =
+    pathname === "/" || PUBLIC_PATHS.some((p) => pathname.startsWith(p));
 
   if (!hasAccessTokenToken && !isPublic && !hasRefreshToken)
     return NextResponse.redirect(new URL("/login", req.url));
