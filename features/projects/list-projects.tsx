@@ -30,34 +30,8 @@ import {
 import { DeleteProjectDialog } from "@/features/projects/delete-project-dialog";
 import { useProjectControllerList } from "@/generated/api";
 
-const PAGE_SIZE = 9;
-
-function getPageItems(page: number, totalPages: number): (number | "ellipsis")[] {
-  if (totalPages <= 7) {
-    return Array.from({ length: totalPages }, (_, index) => index + 1);
-  }
-
-  const items: (number | "ellipsis")[] = [1];
-
-  if (page > 3) {
-    items.push("ellipsis");
-  }
-
-  const start = Math.max(2, page - 1);
-  const end = Math.min(totalPages - 1, page + 1);
-
-  for (let number = start; number <= end; number++) {
-    items.push(number);
-  }
-
-  if (page < totalPages - 2) {
-    items.push("ellipsis");
-  }
-
-  items.push(totalPages);
-
-  return items;
-}
+import { getPageItems } from "@/lib/utils";
+import { PAGE_SIZE } from "@/lib/constants";
 
 export function ListProjects() {
   const t = useTranslations("projects");
@@ -82,9 +56,7 @@ export function ListProjects() {
 
   const projects = data?.data ?? [];
   const meta = data?.meta;
-  const totalPages = meta
-    ? Math.max(1, Math.ceil(meta.total / meta.limit))
-    : 1;
+  const totalPages = meta ? Math.max(1, Math.ceil(meta.total / meta.limit)) : 1;
 
   return (
     <>

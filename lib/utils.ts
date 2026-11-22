@@ -51,3 +51,33 @@ export function getMessageError(
 ): string {
   return extractMessage(apiError?.message) || fallback;
 }
+
+export function getPageItems(
+  page: number,
+  totalPages: number,
+): (number | "ellipsis")[] {
+  if (totalPages <= 7) {
+    return Array.from({ length: totalPages }, (_, index) => index + 1);
+  }
+
+  const items: (number | "ellipsis")[] = [1];
+
+  if (page > 3) {
+    items.push("ellipsis");
+  }
+
+  const start = Math.max(2, page - 1);
+  const end = Math.min(totalPages - 1, page + 1);
+
+  for (let number = start; number <= end; number++) {
+    items.push(number);
+  }
+
+  if (page < totalPages - 2) {
+    items.push("ellipsis");
+  }
+
+  items.push(totalPages);
+
+  return items;
+}

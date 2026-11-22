@@ -9,3 +9,5 @@ export const CO0KIE_OPTIONS = {
   sameSite: "lax" as const,
   path: "/",
 };
+
+export const PAGE_SIZE = 9;
