@@ -26,6 +26,12 @@
     "actions": "Acciones del proyecto",
     "createdAt": "Creado el {date}",
     "issues": "{count, plural, =0 {Sin issues} one {# issue} other {# issues}}",
+    "pagination": {
+      "label": "Paginación de proyectos",
+      "previous": "Anterior",
+      "next": "Siguiente",
+      "page": "Ir a la página {page}"
+    },
     "remove": {
       "title": "Eliminar proyecto",
       "description": "Este proyecto y sus issues se eliminarán de forma permanente. Esta acción no se puede deshacer.",

@@ -18,15 +18,54 @@ import {
   MenubarMenu,
   MenubarTrigger,
 } from "@/components/ui/menubar";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 import { DeleteProjectDialog } from "@/features/projects/delete-project-dialog";
 import { useProjectControllerList } from "@/generated/api";
+
+const PAGE_SIZE = 9;
+
+function getPageItems(page: number, totalPages: number): (number | "ellipsis")[] {
+  if (totalPages <= 7) {
+    return Array.from({ length: totalPages }, (_, index) => index + 1);
+  }
+
+  const items: (number | "ellipsis")[] = [1];
+
+  if (page > 3) {
+    items.push("ellipsis");
+  }
+
+  const start = Math.max(2, page - 1);
+  const end = Math.min(totalPages - 1, page + 1);
+
+  for (let number = start; number <= end; number++) {
+    items.push(number);
+  }
+
+  if (page < totalPages - 2) {
+    items.push("ellipsis");
+  }
+
+  items.push(totalPages);
+
+  return items;
+}
 
 export function ListProjects() {
   const t = useTranslations("projects");
   const format = useFormatter();
+  const [page, setPage] = useState(1);
   const { data, isPending, isError, refetch } = useProjectControllerList({
-    page: 1,
-    limit: 50,
+    page,
+    limit: PAGE_SIZE,
   });
   const [deletedProject, setDeletedProject] = useState<{
     id: string;
@@ -42,61 +81,131 @@ export function ListProjects() {
   }
 
   const projects = data?.data ?? [];
-
-  if (projects.length === 0) {
-    return <p className="text-sm text-muted-foreground">{t("empty")}</p>;
-  }
+  const meta = data?.meta;
+  const totalPages = meta
+    ? Math.max(1, Math.ceil(meta.total / meta.limit))
+    : 1;
 
   return (
     <>
-      <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-        {projects.map((project) => (
-          <li key={project.id}>
-            <Card className="relative h-full">
-              <div className="absolute top-4 right-4 z-10">
-                <Menubar className="h-auto border-0 p-0">
-                  <MenubarMenu>
-                    <MenubarTrigger
-                      className="size-7 justify-center p-0 text-muted-foreground"
-                      aria-label={t("actions")}
-                    >
-                      <MoreHorizontal className="size-4" aria-hidden />
-                    </MenubarTrigger>
-                    <MenubarContent align="end" className="w-auto min-w-40">
-                      <MenubarItem
-                        variant="destructive"
-                        onClick={() =>
-                          setDeletedProject({
-                            id: project.id,
-                            name: project.name,
-                          })
-                        }
+      {projects.length === 0 ? (
+        <p className="text-sm text-muted-foreground">{t("empty")}</p>
+      ) : (
+        <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          {projects.map((project) => (
+            <li key={project.id}>
+              <Card className="relative h-full">
+                <div className="absolute top-4 right-4 z-10">
+                  <Menubar className="h-auto border-0 p-0">
+                    <MenubarMenu>
+                      <MenubarTrigger
+                        className="size-7 justify-center p-0 text-muted-foreground"
+                        aria-label={t("actions")}
                       >
-                        <Trash2 aria-hidden />
-                        {t("remove.action")}
-                      </MenubarItem>
-                    </MenubarContent>
-                  </MenubarMenu>
-                </Menubar>
-              </div>
-              <CardHeader className="pr-14">
-                <CardTitle>{project.name}</CardTitle>
-                <CardDescription>
-                  {t("createdAt", {
-                    date: format.dateTime(new Date(project.createdAt), {
-                      dateStyle: "medium",
-                    }),
-                  })}
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="mt-auto flex items-center gap-1.5 text-muted-foreground">
-                <CircleDot className="size-4" aria-hidden />
-                {t("issues", { count: project.issueCounter })}
-              </CardContent>
-            </Card>
-          </li>
-        ))}
-      </ul>
+                        <MoreHorizontal className="size-4" aria-hidden />
+                      </MenubarTrigger>
+                      <MenubarContent align="end" className="w-auto min-w-40">
+                        <MenubarItem
+                          variant="destructive"
+                          onClick={() =>
+                            setDeletedProject({
+                              id: project.id,
+                              name: project.name,
+                            })
+                          }
+                        >
+                          <Trash2 aria-hidden />
+                          {t("remove.action")}
+                        </MenubarItem>
+                      </MenubarContent>
+                    </MenubarMenu>
+                  </Menubar>
+                </div>
+                <CardHeader className="pr-14">
+                  <CardTitle>{project.name}</CardTitle>
+                  <CardDescription>
+                    {t("createdAt", {
+                      date: format.dateTime(new Date(project.createdAt), {
+                        dateStyle: "medium",
+                      }),
+                    })}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="mt-auto flex items-center gap-1.5 text-muted-foreground">
+                  <CircleDot className="size-4" aria-hidden />
+                  {t("issues", { count: project.issueCounter })}
+                </CardContent>
+              </Card>
+            </li>
+          ))}
+        </ul>
+      )}
+
+      {meta && totalPages > 1 && (
+        <Pagination className="mt-6" aria-label={t("pagination.label")}>
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious
+                href="#"
+                text={t("pagination.previous")}
+                aria-disabled={page === 1}
+                tabIndex={page === 1 ? -1 : undefined}
+                className={
+                  page === 1 ? "pointer-events-none opacity-50" : undefined
+                }
+                onClick={(event) => {
+                  event.preventDefault();
+                  if (page > 1) {
+                    setPage(page - 1);
+                  }
+                }}
+              />
+            </PaginationItem>
+
+            {getPageItems(page, totalPages).map((item, index) =>
+              item === "ellipsis" ? (
+                <PaginationItem key={`ellipsis-${index}`}>
+                  <PaginationEllipsis />
+                </PaginationItem>
+              ) : (
+                <PaginationItem key={item}>
+                  <PaginationLink
+                    href="#"
+                    isActive={item === page}
+                    aria-label={t("pagination.page", { page: item })}
+                    onClick={(event) => {
+                      event.preventDefault();
+                      setPage(item);
+                    }}
+                  >
+                    {item}
+                  </PaginationLink>
+                </PaginationItem>
+              ),
+            )}
+
+            <PaginationItem>
+              <PaginationNext
+                href="#"
+                text={t("pagination.next")}
+                aria-disabled={page === totalPages}
+                tabIndex={page === totalPages ? -1 : undefined}
+                className={
+                  page === totalPages
+                    ? "pointer-events-none opacity-50"
+                    : undefined
+                }
+                onClick={(event) => {
+                  event.preventDefault();
+                  if (page < totalPages) {
+                    setPage(page + 1);
+                  }
+                }}
+              />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
+      )}
 
       <DeleteProjectDialog
         open={deletedProject !== null}

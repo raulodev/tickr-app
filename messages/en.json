@@ -26,6 +26,12 @@
     "actions": "Project actions",
     "createdAt": "Created {date}",
     "issues": "{count, plural, =0 {No issues} one {# issue} other {# issues}}",
+    "pagination": {
+      "label": "Projects pagination",
+      "previous": "Previous",
+      "next": "Next",
+      "page": "Go to page {page}"
+    },
     "remove": {
       "title": "Delete project",
       "description": "This project and its issues will be permanently deleted. This action cannot be undone.",
