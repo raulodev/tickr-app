@@ -30,6 +30,7 @@ import type {
   TenantOrganizationResponseDto,
 } from "@/generated/api/model";
 import { toast } from "@/components/ui/toast";
+import { useQueryClient } from "@tanstack/react-query";
 import { isAxiosError } from "axios";
 import logo from "@/public/logo.webp";
 import { useTranslations } from "next-intl";
@@ -67,8 +68,9 @@ export function OrganizationSwitcher() {
   const { isMobile } = useSidebar();
   const [isTenantDialogOpen, setIsTenantDialogOpen] = useState(false);
 
+  const queryClient = useQueryClient();
   const { data: tenants, refetch: refetchTenants } = useTenantControllerList();
-  const { data: me, refetch: refetchMe } = useAuthControllerMe();
+  const { data: me } = useAuthControllerMe();
   const { mutateAsync } = useAuthControllerSwitchTenant();
 
   const currentTenant = activeTenant(tenants, me);
@@ -86,7 +88,10 @@ export function OrganizationSwitcher() {
       // Guardar el nuevo access token (el tenantId viaja dentro del JWT).
       await setAuthCookie(result.access_token);
 
-      await Promise.all([refetchMe(), refetchTenants()]);
+      // Los datos cacheados (me, organizaciones y el resto de la página actual)
+      // pertenecen al tenant anterior: se invalidan todas las queries para que
+      // se vuelvan a pedir al backend con el nuevo token.
+      await queryClient.invalidateQueries();
       router.refresh();
     } catch (error) {
       if (!isAxiosError<ApiErrorResponseDto>(error)) throw error;
