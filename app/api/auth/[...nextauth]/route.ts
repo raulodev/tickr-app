@@ -68,8 +68,11 @@ const handler = NextAuth({
       }
     },
     async jwt({ user, token }) {
+      // Se añaden los tokens de la API sin reemplazar el token de NextAuth:
+      // sustituirlo perdía `name`, `email` y `picture`, así que la sesión
+      // solo mostraba datos en la primera carga y luego llegaba vacía.
       if (user) {
-        token = {
+        Object.assign(token, {
           accessToken: (
             user as typeof user & {
               accessToken?: string;
@@ -77,7 +80,7 @@ const handler = NextAuth({
           ).accessToken,
           refreshToken: (user as typeof user & { refreshToken?: string })
             .refreshToken,
-        };
+        });
       }
       return token;
     },
