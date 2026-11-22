@@ -19,8 +19,10 @@
       "welcome": "Bienvenido de nuevo, {name}"
     }
   },
-  "projects": {
-    "loading": "Cargando proyectos...",
+      "projects": {
+      "title": "Proyectos",
+      "add": "Nuevo proyecto",
+      "loading": "Cargando proyectos...",
     "error": "No se pudieron cargar los proyectos. Inténtalo de nuevo.",
     "empty": "Todavía no hay proyectos",
     "actions": "Acciones del proyecto",

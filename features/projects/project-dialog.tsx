@@ -155,17 +155,12 @@ export function ProjectDialog({
           </DialogHeader>
 
           <div className="space-y-2">
-            <label htmlFor="project-name" className="text-sm font-medium">
-              {t("name")}
-            </label>
             <Input
               id="project-name"
               autoComplete="off"
               placeholder={t("namePlaceholder")}
               aria-invalid={Boolean(errors.name)}
-              aria-describedby={
-                errors.name ? "project-name-error" : undefined
-              }
+              aria-describedby={errors.name ? "project-name-error" : undefined}
               disabled={isPending}
               {...register("name")}
             />
@@ -182,17 +177,12 @@ export function ProjectDialog({
 
           {!isEditing && (
             <div className="space-y-2">
-              <label htmlFor="project-key" className="text-sm font-medium">
-                {t("key")}
-              </label>
               <Input
                 id="project-key"
                 autoComplete="off"
                 placeholder={t("keyPlaceholder")}
                 aria-invalid={Boolean(errors.key)}
-                aria-describedby={
-                  errors.key ? "project-key-error" : undefined
-                }
+                aria-describedby={errors.key ? "project-key-error" : undefined}
                 disabled={isPending}
                 {...register("key")}
               />
@@ -205,9 +195,7 @@ export function ProjectDialog({
                   {t("validation.key")}
                 </p>
               ) : (
-                <p className="text-sm text-muted-foreground">
-                  {t("keyHint")}
-                </p>
+                <p className="text-sm text-muted-foreground">{t("keyHint")}</p>
               )}
             </div>
           )}

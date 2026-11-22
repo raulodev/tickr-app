@@ -19,8 +19,10 @@
       "welcome": "Welcome back, {name}"
     }
   },
-  "projects": {
-    "loading": "Loading projects...",
+      "projects": {
+      "title": "Projects",
+      "add": "New project",
+      "loading": "Loading projects...",
     "error": "Could not load the projects. Please try again.",
     "empty": "No projects yet",
     "actions": "Project actions",
