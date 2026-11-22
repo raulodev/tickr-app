@@ -31,6 +31,16 @@
     },
     "validation": {
       "name": "The name is required"
+    },
+    "members": {
+      "name": "Name",
+      "email": "Email",
+      "role": "Role",
+      "ADMIN": "Admin",
+      "MEMBER": "Member",
+      "loading": "Loading members...",
+      "empty": "No members found",
+      "error": "Could not load the members. Please try again."
     }
   },
   "LanguageSwitcher": {

@@ -31,6 +31,16 @@
     },
     "validation": {
       "name": "El nombre es requerido"
+    },
+    "members": {
+      "name": "Nombre",
+      "email": "Correo",
+      "role": "Rol",
+      "ADMIN": "Administrador",
+      "MEMBER": "Miembro",
+      "loading": "Cargando miembros...",
+      "empty": "No hay miembros",
+      "error": "No se pudieron cargar los miembros. Inténtalo de nuevo."
     }
   },
   "LanguageSwitcher": {
