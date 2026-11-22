@@ -76,7 +76,6 @@ export function DeleteTenantMemberDialog({
         <DialogFooter>
           <Button
             type="button"
-            variant="outline"
             disabled={isPending}
             onClick={() => onOpenChange(false)}
           >

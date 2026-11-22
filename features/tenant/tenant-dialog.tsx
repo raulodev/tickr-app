@@ -4,6 +4,7 @@ import {
   Dialog,
   DialogContent,
   DialogHeader,
+  DialogFooter,
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useTenantControllerCreate } from "@/generated/api";
@@ -83,10 +84,10 @@ export function TenantDialog({ open, onOpenChange, onTenantCreated }: Props) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-sm">
-        <DialogHeader>
-          <DialogTitle>{t("dialog.title")}</DialogTitle>
-        </DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <DialogHeader>
+            <DialogTitle>{t("dialog.title")}</DialogTitle>
+          </DialogHeader>
           <Input
             placeholder={t("fields.name")}
             aria-invalid={Boolean(errors.name)}
@@ -103,10 +104,12 @@ export function TenantDialog({ open, onOpenChange, onTenantCreated }: Props) {
             </p>
           )}
 
-          <Button type="submit" disabled={isSubmitting}>
-            {t("add")}
-            {isPending && <Spinner data-icon="inline-start" />}
-          </Button>
+          <DialogFooter>
+            <Button type="submit" disabled={isSubmitting}>
+              {t("add")}
+              {isPending && <Spinner data-icon="inline-start" />}
+            </Button>
+          </DialogFooter>
         </form>
       </DialogContent>
     </Dialog>

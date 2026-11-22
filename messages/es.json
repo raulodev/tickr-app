@@ -36,6 +36,7 @@
       "name": "Nombre",
       "email": "Correo",
       "role": "Rol",
+      "actions": "Acciones",
       "ADMIN": "Administrador",
       "MEMBER": "Miembro",
       "loading": "Cargando miembros...",
