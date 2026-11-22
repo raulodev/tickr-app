@@ -25,9 +25,12 @@ import {
   useTenantControllerList,
 } from "@/generated/api";
 import type {
+  ApiErrorResponseDto,
   AuthUserResponseDto,
   TenantOrganizationResponseDto,
 } from "@/generated/api/model";
+import { toast } from "@/components/ui/toast";
+import { isAxiosError } from "axios";
 import logo from "@/public/logo.webp";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
@@ -67,17 +70,27 @@ export function OrganizationSwitcher() {
   async function onChangeTenant(tenantId: string) {
     if (tenantId === currentTenant.id) return;
 
-    const result = await mutateAsync({
-      data: {
-        tenantId: tenantId,
-      },
-    });
+    try {
+      const result = await mutateAsync({
+        data: {
+          tenantId: tenantId,
+        },
+      });
 
-    // Guardar el nuevo access token (el tenantId viaja dentro del JWT).
-    await setAuthCookie(result.access_token);
+      // Guardar el nuevo access token (el tenantId viaja dentro del JWT).
+      await setAuthCookie(result.access_token);
 
-    await Promise.all([refetchMe(), refetchTenants()]);
-    router.refresh();
+      await Promise.all([refetchMe(), refetchTenants()]);
+      router.refresh();
+    } catch (error) {
+      if (!isAxiosError<ApiErrorResponseDto>(error)) throw error;
+
+      toast.add({
+        type: "error",
+        description: t("switchFailed"),
+        priority: "high",
+      });
+    }
   }
 
   return (

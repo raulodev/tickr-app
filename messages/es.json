@@ -50,6 +50,7 @@
     "ADMIN": "Administrador",
     "MEMBER": "Miembro",
     "organizations": "Organizaciones",
-    "addOrg": "Agregar organización"
+    "addOrg": "Agregar organización",
+    "switchFailed": "No se pudo cambiar de organización. Inténtalo de nuevo."
   }
 }
