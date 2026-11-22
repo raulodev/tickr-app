@@ -23,7 +23,8 @@
     "add": "Agregar",
     "dialog": {
       "title": "Agregar organización",
-      "orgCreated": "Organización {name} creada"
+      "orgCreated": "Organización {name} creada",
+      "createFailed": "No se pudo crear la organización. Inténtalo de nuevo."
     },
     "fields": {
       "name": "Nombre"

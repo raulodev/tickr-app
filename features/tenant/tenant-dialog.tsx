@@ -71,7 +71,10 @@ export function TenantDialog({ open, onOpenChange, onTenantCreated }: Props) {
 
       toast.add({
         type: "error",
-        description: getMessageError(error?.response?.data),
+        description: getMessageError(
+          error?.response?.data,
+          t("dialog.createFailed"),
+        ),
         priority: "high",
       });
     }

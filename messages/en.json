@@ -23,7 +23,8 @@
     "add": "Add",
     "dialog": {
       "title": "Add Organization",
-      "orgCreated": "Organization {name} created"
+      "orgCreated": "Organization {name} created",
+      "createFailed": "Could not create the organization. Please try again."
     },
     "fields": {
       "name": "Name"
