@@ -40,7 +40,15 @@
       "MEMBER": "Miembro",
       "loading": "Cargando miembros...",
       "empty": "No hay miembros",
-      "error": "No se pudieron cargar los miembros. Inténtalo de nuevo."
+      "error": "No se pudieron cargar los miembros. Inténtalo de nuevo.",
+      "remove": {
+        "title": "Eliminar miembro",
+        "description": "Este miembro perderá el acceso a la organización. Esta acción no se puede deshacer.",
+        "cancel": "Cancelar",
+        "confirm": "Eliminar",
+        "success": "Miembro eliminado",
+        "failed": "No se pudo eliminar al miembro. Inténtalo de nuevo."
+      }
     }
   },
   "LanguageSwitcher": {

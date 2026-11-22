@@ -40,7 +40,15 @@
       "MEMBER": "Member",
       "loading": "Loading members...",
       "empty": "No members found",
-      "error": "Could not load the members. Please try again."
+      "error": "Could not load the members. Please try again.",
+      "remove": {
+        "title": "Remove member",
+        "description": "This member will lose access to the organization. This action cannot be undone.",
+        "cancel": "Cancel",
+        "confirm": "Remove",
+        "success": "Member removed",
+        "failed": "Could not remove the member. Please try again."
+      }
     }
   },
   "LanguageSwitcher": {
