@@ -26,6 +26,32 @@
     "actions": "Project actions",
     "createdAt": "Created {date}",
     "issues": "{count, plural, =0 {No issues} one {# issue} other {# issues}}",
+    "dialog": {
+      "name": "Name",
+      "namePlaceholder": "Project name",
+      "key": "Key",
+      "keyPlaceholder": "TICK",
+      "keyHint": "2 to 10 uppercase letters or numbers, starting with a letter.",
+      "cancel": "Cancel",
+      "validation": {
+        "name": "The name is required",
+        "key": "Use 2 to 10 uppercase letters or numbers, starting with a letter"
+      },
+      "create": {
+        "title": "Create project",
+        "description": "Choose a name and a key to identify the issues of the new project.",
+        "submit": "Create project",
+        "success": "Project {name} created",
+        "failed": "Could not create the project. Please try again."
+      },
+      "edit": {
+        "title": "Edit project",
+        "description": "Change the name of this project. The key cannot be changed.",
+        "submit": "Save changes",
+        "success": "Project {name} updated",
+        "failed": "Could not update the project. Please try again."
+      }
+    },
     "pagination": {
       "label": "Projects pagination",
       "previous": "Previous",
