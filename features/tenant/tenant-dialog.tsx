@@ -18,6 +18,7 @@ import { ApiErrorResponseDto } from "@/generated/api/model";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
+import { getMessageError } from "@/lib/utils";
 
 const schema = z.object({
   name: z.string().min(1),
@@ -70,7 +71,7 @@ export function TenantDialog({ open, onOpenChange, onTenantCreated }: Props) {
 
       toast.add({
         type: "error",
-        description: (error?.response?.data as ApiErrorResponseDto).message,
+        description: getMessageError(error?.response?.data),
         priority: "high",
       });
     }

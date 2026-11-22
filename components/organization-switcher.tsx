@@ -38,21 +38,27 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { setAuthCookie } from "@/features/auth/actions";
 
+const EMPTY_TENANT: TenantOrganizationResponseDto = {
+  id: "",
+  name: "",
+  role: "ADMIN",
+  slug: "",
+};
+
+/**
+ * Mientras se refrescan `me` y `tenants` tras cambiar de organización el
+ * `tenantId` puede no existir todavía en la lista, así que siempre se
+ * devuelve un tenant válido (vacío) en lugar de `undefined`.
+ */
 const activeTenant = (
   tenants: TenantOrganizationResponseDto[] | undefined,
   me: AuthUserResponseDto | undefined,
 ): TenantOrganizationResponseDto => {
-  if (!tenants || !me)
-    return {
-      id: "",
-      name: "",
-      role: "ADMIN",
-      slug: "",
-    };
+  if (!tenants || !me) return EMPTY_TENANT;
 
-  return tenants.filter(
-    (item) => item.id === me.tenantId,
-  )[0] as TenantOrganizationResponseDto;
+  return (
+    tenants.find((item) => item.id === me.tenantId) ?? EMPTY_TENANT
+  );
 };
 
 export function OrganizationSwitcher() {
