@@ -24,7 +24,16 @@
     "error": "Could not load the projects. Please try again.",
     "empty": "No projects yet",
     "createdAt": "Created {date}",
-    "issues": "{count, plural, =0 {No issues} one {# issue} other {# issues}}"
+    "issues": "{count, plural, =0 {No issues} one {# issue} other {# issues}}",
+    "remove": {
+      "title": "Delete project",
+      "description": "This project and its issues will be permanently deleted. This action cannot be undone.",
+      "descriptionWithName": "The project {name} and its issues will be permanently deleted. This action cannot be undone.",
+      "cancel": "Cancel",
+      "confirm": "Delete",
+      "success": "Project deleted",
+      "failed": "Could not delete the project. Please try again."
+    }
   },
   "tenant": {
     "add": "Add",

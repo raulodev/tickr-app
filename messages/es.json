@@ -24,7 +24,16 @@
     "error": "No se pudieron cargar los proyectos. Inténtalo de nuevo.",
     "empty": "Todavía no hay proyectos",
     "createdAt": "Creado el {date}",
-    "issues": "{count, plural, =0 {Sin issues} one {# issue} other {# issues}}"
+    "issues": "{count, plural, =0 {Sin issues} one {# issue} other {# issues}}",
+    "remove": {
+      "title": "Eliminar proyecto",
+      "description": "Este proyecto y sus issues se eliminarán de forma permanente. Esta acción no se puede deshacer.",
+      "descriptionWithName": "El proyecto {name} y sus issues se eliminarán de forma permanente. Esta acción no se puede deshacer.",
+      "cancel": "Cancelar",
+      "confirm": "Eliminar",
+      "success": "Proyecto eliminado",
+      "failed": "No se pudo eliminar el proyecto. Inténtalo de nuevo."
+    }
   },
   "tenant": {
     "add": "Agregar",
