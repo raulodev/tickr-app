@@ -44,11 +44,15 @@ async function applyAuthCookies(
 async function doRefresh(
   refreshToken: string,
   tenantId: string,
+  locale?: string,
 ): Promise<AuthSessionResponseDto | null> {
   try {
     const session = await authControllerRefresh(
       { refreshToken, tenantId },
-      { baseURL: API_URL },
+      {
+        baseURL: API_URL,
+        headers: locale ? { "accept-language": locale } : undefined,
+      },
     );
 
     if (!session?.access_token || !session?.refresh_token) {
@@ -75,7 +79,11 @@ const pendingRefreshes = new Map<
   Promise<AuthSessionResponseDto | null>
 >();
 
-function refreshToken(refreshToken?: string, tenantId?: string) {
+function refreshToken(
+  refreshToken?: string,
+  tenantId?: string,
+  locale?: string,
+) {
   if (!refreshToken || !tenantId) {
     console.log(
       "Cannot refresh token: current refreshToken or tenantId is undefined",
@@ -86,7 +94,7 @@ function refreshToken(refreshToken?: string, tenantId?: string) {
   const pending = pendingRefreshes.get(refreshToken);
   if (pending) return pending;
 
-  const request = doRefresh(refreshToken, tenantId).finally(() => {
+  const request = doRefresh(refreshToken, tenantId, locale).finally(() => {
     pendingRefreshes.delete(refreshToken);
   });
 
@@ -117,6 +125,13 @@ async function proxy(
       : await request.arrayBuffer();
 
   const cookieStore = await cookies();
+  // El idioma actual se guarda en la cookie `locale` (ver i18n/request.ts).
+  // `document`/cliente no puede leerla porque es httpOnly, así que se resuelve
+  // aquí, en el proxy, y se reenvía al backend como Accept-Language.
+  const locale =
+    cookieStore.get("locale")?.value ??
+    request.headers.get("accept-language") ??
+    undefined;
   const currentAccessToken = cookieStore.get("accessToken")?.value;
   const currentRefreshToken = cookieStore.get("refreshToken")?.value;
   const currentTenantId =
@@ -130,6 +145,7 @@ async function proxy(
       if (value) headers.set(header, value);
     }
     if (accessToken) headers.set("authorization", `Bearer ${accessToken}`);
+    if (locale) headers.set("accept-language", locale);
 
     return fetch(url, {
       method: request.method,
@@ -143,7 +159,11 @@ async function proxy(
   let session: AuthSessionResponseDto | null = null;
 
   if (response.status === 401) {
-    session = await refreshToken(currentRefreshToken, currentTenantId);
+    session = await refreshToken(
+      currentRefreshToken,
+      currentTenantId,
+      locale,
+    );
 
     if (session) {
       await response.body?.cancel().catch(() => {});

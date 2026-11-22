@@ -18,6 +18,12 @@ export const customInstance = <T>(
   config: AxiosRequestConfig,
   options?: AxiosRequestConfig,
 ): Promise<T> =>
-  AXIOS_INSTANCE({ ...config, ...options }).then(({ data }) => data);
+  AXIOS_INSTANCE({
+    ...config,
+    ...options,
+    // Se combinan para no perder el Content-Type de la petición generada
+    // cuando solo se añaden cabeceras extra (p. ej. Accept-Language).
+    headers: { ...config.headers, ...options?.headers },
+  }).then(({ data }) => data);
 
 export type ErrorType<E> = AxiosError<E>;
