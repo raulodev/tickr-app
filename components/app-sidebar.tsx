@@ -13,7 +13,7 @@ import {
 import { useSession } from "next-auth/react";
 import { NavUser } from "./nav-user";
 import { useTranslations } from "next-intl";
-import { HomeIcon, FolderIcon } from "lucide-react";
+import { HomeIcon, FolderIcon, UserRoundGroupIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { OrganizationSwitcher } from "./organization-switcher";
 
@@ -32,6 +32,11 @@ export function AppSidebar() {
       title: t("projects"),
       url: "/dashboard/projects",
       icon: FolderIcon,
+    },
+    {
+      title: t("members"),
+      url: "/dashboard/members",
+      icon: UserRoundGroupIcon,
     },
   ];
 
