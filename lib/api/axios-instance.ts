@@ -27,6 +27,17 @@ const processQueue = (error: unknown, token: string | null = null): void => {
   failedQueue = [];
 };
 
+axiosInstance.interceptors.request.use((config) => {
+  // Las cookies son la única fuente de verdad del token actual: el login, el
+  // refresh y el cambio de organización las actualizan. Si la cabecera se
+  // guardara en `defaults` se quedaría con el token del tenant anterior.
+  const { accessToken } = getCookies();
+
+  if (accessToken) config.headers.set("Authorization", `Bearer ${accessToken}`);
+
+  return config;
+});
+
 axiosInstance.interceptors.response.use(
   (response) => response,
   async (error) => {
@@ -57,9 +68,6 @@ axiosInstance.interceptors.response.use(
         });
 
         setAuthCookies(session.access_token, session.refresh_token);
-
-        axiosInstance.defaults.headers.common["Authorization"] =
-          `Bearer ${session.access_token}`;
 
         processQueue(null, session.access_token);
         return axiosInstance(originalRequest);
