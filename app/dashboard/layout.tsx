@@ -18,22 +18,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const { status } = useSession();
   const t = useTranslations("dashboard");
 
-  if (status === "loading")
-    return (
-      <main className="w-full h-screen flex justify-center items-center">
-        <div className="flex max-w-xs flex-col gap-4 [--radius:1rem]">
-          <Item variant="muted">
-            <ItemMedia>
-              <Spinner />
-            </ItemMedia>
-            <ItemContent>
-              <ItemTitle className="line-clamp-1">{t("loading")}</ItemTitle>
-            </ItemContent>
-          </Item>
-        </div>
-      </main>
-    );
-
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -53,6 +37,21 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         </NavigationMenu>
         {children}
       </main>
+
+      {status === "loading" && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background">
+          <div className="flex max-w-xs flex-col gap-4 [--radius:1rem]">
+            <Item variant="muted">
+              <ItemMedia>
+                <Spinner />
+              </ItemMedia>
+              <ItemContent>
+                <ItemTitle className="line-clamp-1">{t("loading")}</ItemTitle>
+              </ItemContent>
+            </Item>
+          </div>
+        </div>
+      )}
     </SidebarProvider>
   );
 }
