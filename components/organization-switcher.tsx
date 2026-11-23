@@ -20,7 +20,7 @@ import {
 import { TenantDialog } from "@/features/tenant/tenant-dialog";
 
 import { toast } from "@/components/ui/toast";
-import { setAuthCookie } from "@/features/auth/actions";
+import { setAuthCookies } from "@/lib/cookies";
 import {
   useAuthControllerMe,
   useAuthControllerSwitchTenant,
@@ -103,7 +103,7 @@ export function OrganizationSwitcher() {
       });
 
       // Guardar el nuevo access token (el tenantId viaja dentro del JWT).
-      await setAuthCookie(result.access_token);
+      setAuthCookies(result.access_token);
 
       // Los datos cacheados (me, organizaciones y el resto de la página actual)
       // pertenecen al tenant anterior: se invalidan todas las queries para que

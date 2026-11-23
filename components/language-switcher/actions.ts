@@ -20,6 +20,5 @@ export async function setLocale(nextLocale: string) {
     path: "/",
     maxAge: COOKIE_MAX_AGE,
     sameSite: "lax",
-    httpOnly: true, // the client no longer needs to read it
   });
 }

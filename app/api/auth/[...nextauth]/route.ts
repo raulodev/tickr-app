@@ -1,6 +1,6 @@
-import { removeAuthCookies, setAuthCookie } from "@/features/auth/actions";
 import { authControllerLogin, authControllerLogout } from "@/generated/api";
 import { LoginDto } from "@/generated/api/model";
+import { removeAuthCookies, setAuthCookies } from "@/lib/cookies.server";
 import NextAuth from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 
@@ -55,7 +55,11 @@ const handler = NextAuth({
           baseURL:
             process.env.INTERNAL_API_URL ?? process.env.NEXT_PUBLIC_API_URL,
         });
-        await setAuthCookie(result.access_token, result.refresh_token);
+
+        // Debe hacerse con la API de cookies del servidor: `js-cookie`
+        // no escribe nada fuera del navegador.
+        await setAuthCookies(result.access_token, result.refresh_token);
+
         Object.assign(user, {
           accessToken: result.access_token,
           refreshToken: result.refresh_token,
