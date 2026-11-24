@@ -2,6 +2,7 @@
 
 import { CircleDot, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 import { useFormatter, useTranslations } from "next-intl";
+import Link from "next/link";
 import { useState } from "react";
 
 import {
@@ -72,6 +73,11 @@ export function ListProjects() {
           {projects.map((project) => (
             <li key={project.id}>
               <Card className="relative h-full">
+                <Link
+                  href={`/dashboard/projects/${project.id}/issues`}
+                  aria-label={t("viewIssues", { name: project.name })}
+                  className="absolute inset-0 z-0 rounded-xl outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+                />
                 <div className="absolute top-4 right-4 z-10">
                   <Menubar className="h-auto border-0 p-0">
                     <MenubarMenu>
@@ -103,7 +109,9 @@ export function ListProjects() {
                   </Menubar>
                 </div>
                 <CardHeader className="pr-14">
-                  <CardTitle>{project.name}</CardTitle>
+                  <CardTitle className="group-hover/card:underline">
+                    {project.name}
+                  </CardTitle>
                   <CardDescription>
                     {t("createdAt", {
                       date: format.dateTime(new Date(project.createdAt), {

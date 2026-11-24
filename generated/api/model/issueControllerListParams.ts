@@ -9,8 +9,12 @@ export type IssueControllerListParams = {
   page: number;
   limit: number;
   projectId: string;
-  status: string;
-  priority: string;
-  assigneeId: string;
-  q: string;
+  /** @nullable */
+  status?: string | null;
+  /** @nullable */
+  priority?: string | null;
+  /** @nullable */
+  assigneeId?: string | null;
+  /** @nullable */
+  q?: string | null;
 };

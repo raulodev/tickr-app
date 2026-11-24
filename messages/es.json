@@ -52,15 +52,16 @@
       "welcome": "Bienvenido de nuevo, {name}"
     }
   },
-      "projects": {
-      "title": "Proyectos",
-      "add": "Nuevo proyecto",
-      "loading": "Cargando proyectos...",
+  "projects": {
+    "title": "Proyectos",
+    "add": "Nuevo proyecto",
+    "loading": "Cargando proyectos...",
     "error": "No se pudieron cargar los proyectos. Inténtalo de nuevo.",
     "empty": "Todavía no hay proyectos",
     "actions": "Acciones del proyecto",
     "createdAt": "Creado el {date}",
     "issues": "{count, plural, =0 {Sin issues} one {# issue} other {# issues}}",
+    "viewIssues": "Ver los issues de {name}",
     "dialog": {
       "name": "Nombre",
       "namePlaceholder": "Nombre del proyecto",
@@ -102,6 +103,56 @@
       "action": "Eliminar proyecto",
       "success": "Proyecto eliminado",
       "failed": "No se pudo eliminar el proyecto. Inténtalo de nuevo."
+    }
+  },
+  "issues": {
+    "title": "Issues",
+    "add": "Nuevo issue",
+    "back": "Volver a proyectos",
+    "projectTitle": "{name}",
+    "loading": "Cargando issues...",
+    "error": "No se pudieron cargar los issues. Inténtalo de nuevo.",
+    "empty": "Todavía no hay issues",
+    "columns": {
+      "key": "Clave",
+      "title": "Título",
+      "status": "Estado",
+      "priority": "Prioridad",
+      "createdAt": "Creado"
+    },
+    "status": {
+      "OPEN": "Abierto",
+      "IN_PROGRESS": "En progreso",
+      "CLOSED": "Cerrado"
+    },
+    "priority": {
+      "LOW": "Baja",
+      "MEDIUM": "Media",
+      "HIGH": "Alta",
+      "URGENT": "Urgente"
+    },
+    "dialog": {
+      "title": "Crear issue",
+      "description": "Describe el trabajo y elige quién lo va a tomar.",
+      "titlePlaceholder": "Título del issue",
+      "descriptionPlaceholder": "Agrega más contexto (opcional)",
+      "priority": "Prioridad",
+      "assignee": "Responsable",
+      "assigneePlaceholder": "Selecciona un miembro",
+      "cancel": "Cancelar",
+      "submit": "Crear issue",
+      "success": "Issue {key} creado",
+      "failed": "No se pudo crear el issue. Inténtalo de nuevo.",
+      "validation": {
+        "title": "El título es requerido",
+        "assignee": "Selecciona un responsable"
+      }
+    },
+    "pagination": {
+      "label": "Paginación de issues",
+      "previous": "Anterior",
+      "next": "Siguiente",
+      "page": "Ir a la página {page}"
     }
   },
   "tenant": {
