@@ -33,15 +33,27 @@ import {
   getIssueControllerListQueryKey,
   getProjectControllerListQueryKey,
   useIssueControllerCreate,
+  useIssueControllerUpdate,
   useTenantControllerListMembers,
 } from "@/generated/api";
-import { ApiErrorResponseDto, IssuePriority } from "@/generated/api/model";
+import {
+  ApiErrorResponseDto,
+  IssuePriority,
+  IssueResponseDto,
+  IssueStatus,
+  UpdateIssueDto,
+} from "@/generated/api/model";
 import { getMessageError } from "@/lib/utils";
 import { useAppStore } from "@/stores/app";
 
 const schema = z.object({
   title: z.string().trim().min(1),
   description: z.string().trim(),
+  status: z.enum([
+    IssueStatus.OPEN,
+    IssueStatus.IN_PROGRESS,
+    IssueStatus.CLOSED,
+  ]),
   priority: z.enum([
     IssuePriority.LOW,
     IssuePriority.MEDIUM,
@@ -60,14 +72,21 @@ interface Props {
     eventDetails?: DialogRootChangeEventDetails,
   ) => void;
   projectId: string;
+  /** Si se recibe un issue, el diálogo lo actualiza en lugar de crear uno. */
+  issue?: IssueResponseDto;
 }
 
-export function IssueDialog({ open, onOpenChange, projectId }: Props) {
+export function IssueDialog({ open, onOpenChange, projectId, issue }: Props) {
   const t = useTranslations("issues");
   const queryClient = useQueryClient();
   const { currentUser } = useAppStore();
   const { data: members } = useTenantControllerListMembers();
-  const { mutateAsync: createIssue, isPending } = useIssueControllerCreate();
+  const { mutateAsync: createIssue, isPending: isCreating } =
+    useIssueControllerCreate();
+  const { mutateAsync: updateIssue, isPending: isUpdating } =
+    useIssueControllerUpdate();
+  const isEditing = Boolean(issue?.id);
+  const isPending = isEditing ? isUpdating : isCreating;
   const {
     register,
     control,
@@ -79,6 +98,7 @@ export function IssueDialog({ open, onOpenChange, projectId }: Props) {
     defaultValues: {
       title: "",
       description: "",
+      status: IssueStatus.OPEN,
       priority: IssuePriority.MEDIUM,
       assigneeId: "",
     },
@@ -86,18 +106,36 @@ export function IssueDialog({ open, onOpenChange, projectId }: Props) {
 
   const defaultAssigneeId = currentUser?.id ?? "";
 
-  // Al abrir, el formulario se vacía y se asigna el issue al usuario actual,
-  // ya que el backend exige un responsable para crear el issue.
+  // Al abrir, el formulario se llena con el issue a editar o queda vacío para
+  // crear uno nuevo. Al crear el issue se asigna al usuario actual, ya que el
+  // backend exige un responsable.
   useEffect(() => {
     if (!open) return;
 
-    reset({
-      title: "",
-      description: "",
-      priority: IssuePriority.MEDIUM,
-      assigneeId: defaultAssigneeId,
-    });
-  }, [open, defaultAssigneeId, reset]);
+    reset(
+      issue
+        ? {
+            title: issue.title,
+            description: issue.description ?? "",
+            status: issue.status,
+            priority: issue.priority,
+            assigneeId: issue.assigneeId ?? defaultAssigneeId,
+          }
+        : {
+            title: "",
+            description: "",
+            status: IssueStatus.OPEN,
+            priority: IssuePriority.MEDIUM,
+            assigneeId: defaultAssigneeId,
+          },
+    );
+  }, [open, issue, defaultAssigneeId, reset]);
+
+  const statusItems = [
+    { value: IssueStatus.OPEN, label: t("status.OPEN") },
+    { value: IssueStatus.IN_PROGRESS, label: t("status.IN_PROGRESS") },
+    { value: IssueStatus.CLOSED, label: t("status.CLOSED") },
+  ];
 
   const priorityItems = [
     { value: IssuePriority.LOW, label: t("priority.LOW") },
@@ -119,6 +157,7 @@ export function IssueDialog({ open, onOpenChange, projectId }: Props) {
       reset({
         title: "",
         description: "",
+        status: IssueStatus.OPEN,
         priority: IssuePriority.MEDIUM,
         assigneeId: defaultAssigneeId,
       });
@@ -129,7 +168,33 @@ export function IssueDialog({ open, onOpenChange, projectId }: Props) {
 
   async function onSubmit(values: FormValues) {
     try {
-      const issue = await createIssue({
+      if (issue?.id) {
+        // El spec describe `description` y `assigneeId` como objetos porque son
+        // nullable; el backend espera el string (o null) directamente.
+        const data = {
+          title: values.title,
+          description: values.description,
+          status: values.status,
+          priority: values.priority,
+          assigneeId: values.assigneeId,
+        } as unknown as UpdateIssueDto;
+
+        const updated = await updateIssue({ id: issue.id, data });
+
+        toast.add({
+          type: "success",
+          description: t("dialog.edit.success", { key: updated.key }),
+        });
+
+        queryClient.invalidateQueries({
+          queryKey: getIssueControllerListQueryKey(),
+        });
+
+        handleOpenChange(false);
+        return;
+      }
+
+      const created = await createIssue({
         data: {
           projectId,
           title: values.title,
@@ -141,7 +206,7 @@ export function IssueDialog({ open, onOpenChange, projectId }: Props) {
 
       toast.add({
         type: "success",
-        description: t("dialog.success", { key: issue.key }),
+        description: t("dialog.success", { key: created.key }),
       });
 
       queryClient.invalidateQueries({
@@ -161,7 +226,7 @@ export function IssueDialog({ open, onOpenChange, projectId }: Props) {
         type: "error",
         description: getMessageError(
           error?.response?.data,
-          t("dialog.failed"),
+          t(isEditing ? "dialog.edit.failed" : "dialog.failed"),
         ),
         priority: "high",
       });
@@ -173,8 +238,14 @@ export function IssueDialog({ open, onOpenChange, projectId }: Props) {
       <DialogContent className="sm:max-w-md">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <DialogHeader>
-            <DialogTitle>{t("dialog.title")}</DialogTitle>
-            <DialogDescription>{t("dialog.description")}</DialogDescription>
+            <DialogTitle>
+              {t(isEditing ? "dialog.edit.title" : "dialog.title")}
+            </DialogTitle>
+            <DialogDescription>
+              {isEditing
+                ? t("dialog.edit.description", { key: issue?.key ?? "" })
+                : t("dialog.description")}
+            </DialogDescription>
           </DialogHeader>
 
           <div className="space-y-2">
@@ -207,6 +278,47 @@ export function IssueDialog({ open, onOpenChange, projectId }: Props) {
               {...register("description")}
             />
           </div>
+
+          {isEditing && (
+            <div className="space-y-2">
+              <p
+                id="issue-status-label"
+                className="text-sm text-muted-foreground"
+              >
+                {t("dialog.status")}
+              </p>
+              <Controller
+                control={control}
+                name="status"
+                render={({ field }) => (
+                  <Select
+                    items={statusItems}
+                    value={field.value}
+                    onValueChange={(value) => {
+                      if (value) {
+                        field.onChange(value);
+                      }
+                    }}
+                    disabled={isPending}
+                  >
+                    <SelectTrigger
+                      className="w-full"
+                      aria-labelledby="issue-status-label"
+                    >
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {statusItems.map((item) => (
+                        <SelectItem key={item.value} value={item.value}>
+                          {item.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                )}
+              />
+            </div>
+          )}
 
           <div className="grid gap-2 sm:grid-cols-2">
             <div className="space-y-2">
@@ -306,7 +418,7 @@ export function IssueDialog({ open, onOpenChange, projectId }: Props) {
               {t("dialog.cancel")}
             </Button>
             <Button type="submit" disabled={isSubmitting || isPending}>
-              {t("dialog.submit")}
+              {t(isEditing ? "dialog.edit.submit" : "dialog.submit")}
               {isPending && <Spinner data-icon="inline-start" />}
             </Button>
           </DialogFooter>

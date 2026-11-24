@@ -1,8 +1,10 @@
 "use client";
 
+import { Pencil } from "lucide-react";
 import { useFormatter, useTranslations } from "next-intl";
 import { useState } from "react";
 
+import { Button } from "@/components/ui/button";
 import {
   Pagination,
   PaginationContent,
@@ -20,8 +22,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { IssueDialog } from "@/features/issues/issue-dialog";
 import { useIssueControllerList } from "@/generated/api";
-import { IssuePriority, IssueStatus } from "@/generated/api/model";
+import {
+  IssuePriority,
+  IssueResponseDto,
+  IssueStatus,
+} from "@/generated/api/model";
 import { PAGE_SIZE } from "@/lib/constants";
 import { getPageItems } from "@/lib/utils";
 
@@ -53,7 +60,7 @@ const PRIORITY_LABELS: Record<IssuePriority, string> = {
   [IssuePriority.URGENT]: "priority.URGENT",
 };
 
-const columns = 5;
+const columns = 6;
 
 interface Props {
   projectId: string;
@@ -63,6 +70,7 @@ export function ListIssues({ projectId }: Props) {
   const t = useTranslations("issues");
   const format = useFormatter();
   const [page, setPage] = useState(1);
+  const [editedIssue, setEditedIssue] = useState<IssueResponseDto | null>(null);
   const { data, isPending, isError } = useIssueControllerList({
     page,
     limit: PAGE_SIZE,
@@ -84,6 +92,9 @@ export function ListIssues({ projectId }: Props) {
             <TableHead>{t("columns.priority")}</TableHead>
             <TableHead className="text-right">
               {t("columns.createdAt")}
+            </TableHead>
+            <TableHead className="w-0">
+              <span className="sr-only">{t("columns.actions")}</span>
             </TableHead>
           </TableRow>
         </TableHeader>
@@ -140,6 +151,17 @@ export function ListIssues({ projectId }: Props) {
                   {format.dateTime(new Date(issue.createdAt), {
                     dateStyle: "medium",
                   })}
+                </TableCell>
+                <TableCell className="text-right">
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon-sm"
+                    aria-label={t("edit.action", { key: issue.key })}
+                    onClick={() => setEditedIssue(issue)}
+                  >
+                    <Pencil aria-hidden />
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}
@@ -211,6 +233,17 @@ export function ListIssues({ projectId }: Props) {
           </PaginationContent>
         </Pagination>
       )}
+
+      <IssueDialog
+        projectId={projectId}
+        issue={editedIssue ?? undefined}
+        open={editedIssue !== null}
+        onOpenChange={(open) => {
+          if (!open) {
+            setEditedIssue(null);
+          }
+        }}
+      />
     </>
   );
 }

@@ -118,7 +118,8 @@
       "title": "Title",
       "status": "Status",
       "priority": "Priority",
-      "createdAt": "Created"
+      "createdAt": "Created",
+      "actions": "Actions"
     },
     "status": {
       "OPEN": "Open",
@@ -131,18 +132,29 @@
       "HIGH": "High",
       "URGENT": "Urgent"
     },
+    "edit": {
+      "action": "Edit issue {key}"
+    },
     "dialog": {
       "title": "Create issue",
       "description": "Describe the work and choose who will take it.",
       "titlePlaceholder": "Issue title",
       "descriptionPlaceholder": "Add more context (optional)",
       "priority": "Priority",
+      "status": "Status",
       "assignee": "Assignee",
       "assigneePlaceholder": "Select a member",
       "cancel": "Cancel",
       "submit": "Create issue",
       "success": "Issue {key} created",
       "failed": "Could not create the issue. Please try again.",
+      "edit": {
+        "title": "Edit issue",
+        "description": "Update the details of {key}.",
+        "submit": "Save changes",
+        "success": "Issue {key} updated",
+        "failed": "Could not update the issue. Please try again."
+      },
       "validation": {
         "title": "The title is required",
         "assignee": "Select an assignee"

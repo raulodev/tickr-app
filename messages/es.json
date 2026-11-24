@@ -118,7 +118,8 @@
       "title": "Título",
       "status": "Estado",
       "priority": "Prioridad",
-      "createdAt": "Creado"
+      "createdAt": "Creado",
+      "actions": "Acciones"
     },
     "status": {
       "OPEN": "Abierto",
@@ -131,18 +132,29 @@
       "HIGH": "Alta",
       "URGENT": "Urgente"
     },
+    "edit": {
+      "action": "Editar el issue {key}"
+    },
     "dialog": {
       "title": "Crear issue",
       "description": "Describe el trabajo y elige quién lo va a tomar.",
       "titlePlaceholder": "Título del issue",
       "descriptionPlaceholder": "Agrega más contexto (opcional)",
       "priority": "Prioridad",
+      "status": "Estado",
       "assignee": "Responsable",
       "assigneePlaceholder": "Selecciona un miembro",
       "cancel": "Cancelar",
       "submit": "Crear issue",
       "success": "Issue {key} creado",
       "failed": "No se pudo crear el issue. Inténtalo de nuevo.",
+      "edit": {
+        "title": "Editar issue",
+        "description": "Actualiza los datos del issue {key}.",
+        "submit": "Guardar cambios",
+        "success": "Issue {key} actualizado",
+        "failed": "No se pudo actualizar el issue. Inténtalo de nuevo."
+      },
       "validation": {
         "title": "El título es requerido",
         "assignee": "Selecciona un responsable"
