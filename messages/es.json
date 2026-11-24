@@ -170,6 +170,42 @@
         "assignee": "Selecciona un responsable"
       }
     },
+    "comments": {
+      "action": "Ver los comentarios del issue {key}",
+      "title": "Comentarios",
+      "description": "Conversación sobre {key}.",
+      "loading": "Cargando comentarios...",
+      "error": "No se pudieron cargar los comentarios. Inténtalo de nuevo.",
+      "empty": "Todavía no hay comentarios",
+      "placeholder": "Escribe un comentario",
+      "submit": "Comentar",
+      "created": "Comentario agregado",
+      "failed": "No se pudo agregar el comentario. Inténtalo de nuevo.",
+      "edited": "(editado)",
+      "edit": {
+        "action": "Editar comentario",
+        "placeholder": "Comentario",
+        "save": "Guardar",
+        "cancel": "Cancelar",
+        "success": "Comentario actualizado",
+        "failed": "No se pudo actualizar el comentario. Inténtalo de nuevo."
+      },
+      "remove": {
+        "title": "Eliminar comentario",
+        "description": "Este comentario se eliminará de forma permanente. Esta acción no se puede deshacer.",
+        "action": "Eliminar comentario",
+        "confirm": "Eliminar",
+        "cancel": "Cancelar",
+        "success": "Comentario eliminado",
+        "failed": "No se pudo eliminar el comentario. Inténtalo de nuevo."
+      },
+      "validation": {
+        "body": "Escribe algo antes de comentar"
+      },
+      "pagination": {
+        "label": "Paginación de comentarios"
+      }
+    },
     "history": {
       "title": "Historial del issue",
       "description": "Actividad registrada en {key}.",

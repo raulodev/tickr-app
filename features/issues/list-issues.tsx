@@ -1,6 +1,6 @@
 "use client";
 
-import { History, Pencil, Trash2 } from "lucide-react";
+import { History, MessageSquare, Pencil, Trash2 } from "lucide-react";
 import { useFormatter, useTranslations } from "next-intl";
 import { useState } from "react";
 
@@ -22,6 +22,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { IssueCommentsDialog } from "@/features/issues/comment-dialog";
 import { DeleteIssueDialog } from "@/features/issues/delete-issue-dialog";
 import { IssueDialog } from "@/features/issues/issue-dialog";
 import { IssueHistoryDialog } from "@/features/issues/issue-history-dialog";
@@ -77,6 +78,9 @@ export function ListIssues({ projectId }: Props) {
     null,
   );
   const [historyIssue, setHistoryIssue] = useState<IssueResponseDto | null>(
+    null,
+  );
+  const [commentsIssue, setCommentsIssue] = useState<IssueResponseDto | null>(
     null,
   );
   const { data, isPending, isError } = useIssueControllerList({
@@ -162,6 +166,16 @@ export function ListIssues({ projectId }: Props) {
                 </TableCell>
                 <TableCell className="text-right whitespace-nowrap">
                   <div className="inline-flex items-center gap-0.5">
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon-sm"
+                      className="text-muted-foreground"
+                      aria-label={t("comments.action", { key: issue.key })}
+                      onClick={() => setCommentsIssue(issue)}
+                    >
+                      <MessageSquare aria-hidden />
+                    </Button>
                     <Button
                       type="button"
                       variant="ghost"
@@ -274,6 +288,19 @@ export function ListIssues({ projectId }: Props) {
           }
         }}
       />
+
+      {commentsIssue !== null && (
+        <IssueCommentsDialog
+          key={commentsIssue.id}
+          issue={commentsIssue}
+          open
+          onOpenChange={(open) => {
+            if (!open) {
+              setCommentsIssue(null);
+            }
+          }}
+        />
+      )}
 
       {historyIssue !== null && (
         <IssueHistoryDialog

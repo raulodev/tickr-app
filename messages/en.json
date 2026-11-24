@@ -170,6 +170,42 @@
         "assignee": "Select an assignee"
       }
     },
+    "comments": {
+      "action": "View comments of {key}",
+      "title": "Comments",
+      "description": "Conversation about {key}.",
+      "loading": "Loading comments...",
+      "error": "Could not load the comments. Please try again.",
+      "empty": "No comments yet",
+      "placeholder": "Write a comment",
+      "submit": "Comment",
+      "created": "Comment added",
+      "failed": "Could not add the comment. Please try again.",
+      "edited": "(edited)",
+      "edit": {
+        "action": "Edit comment",
+        "placeholder": "Comment",
+        "save": "Save",
+        "cancel": "Cancel",
+        "success": "Comment updated",
+        "failed": "Could not update the comment. Please try again."
+      },
+      "remove": {
+        "title": "Delete comment",
+        "description": "This comment will be permanently deleted. This action cannot be undone.",
+        "action": "Delete comment",
+        "confirm": "Delete",
+        "cancel": "Cancel",
+        "success": "Comment deleted",
+        "failed": "Could not delete the comment. Please try again."
+      },
+      "validation": {
+        "body": "Write something before commenting"
+      },
+      "pagination": {
+        "label": "Comments pagination"
+      }
+    },
     "history": {
       "title": "Issue history",
       "description": "Activity recorded for {key}.",
