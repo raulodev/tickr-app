@@ -135,6 +135,16 @@
     "edit": {
       "action": "Editar el issue {key}"
     },
+    "remove": {
+      "title": "Eliminar issue",
+      "description": "Este issue se eliminará de forma permanente. Esta acción no se puede deshacer.",
+      "descriptionWithKey": "El issue {key} se eliminará de forma permanente. Esta acción no se puede deshacer.",
+      "action": "Eliminar el issue {key}",
+      "cancel": "Cancelar",
+      "confirm": "Eliminar",
+      "success": "Issue eliminado",
+      "failed": "No se pudo eliminar el issue. Inténtalo de nuevo."
+    },
     "dialog": {
       "title": "Crear issue",
       "description": "Describe el trabajo y elige quién lo va a tomar.",
@@ -158,6 +168,31 @@
       "validation": {
         "title": "El título es requerido",
         "assignee": "Selecciona un responsable"
+      }
+    },
+    "history": {
+      "title": "Historial del issue",
+      "description": "Actividad registrada en {key}.",
+      "action": "Ver el historial del issue {key}",
+      "loading": "Cargando historial...",
+      "error": "No se pudo cargar el historial. Inténtalo de nuevo.",
+      "empty": "Todavía no hay actividad",
+      "emptyValue": "Sin valor",
+      "change": "{from} → {to}",
+      "columns": {
+        "event": "Evento",
+        "change": "Cambio",
+        "actor": "Por",
+        "createdAt": "Cuándo"
+      },
+      "event": {
+        "CREATED": "Creado",
+        "STATUS_CHANGED": "Estado cambiado",
+        "PRIORITY_CHANGED": "Prioridad cambiada",
+        "ASSIGNEE_CHANGED": "Responsable cambiado"
+      },
+      "pagination": {
+        "label": "Paginación del historial"
       }
     },
     "pagination": {

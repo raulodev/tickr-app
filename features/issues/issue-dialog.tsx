@@ -32,6 +32,7 @@ import { toast } from "@/components/ui/toast";
 import {
   getIssueControllerListQueryKey,
   getProjectControllerListQueryKey,
+  getIssueControllerHistoryQueryKey,
   useIssueControllerCreate,
   useIssueControllerUpdate,
   useTenantControllerListMembers,
@@ -146,7 +147,7 @@ export function IssueDialog({ open, onOpenChange, projectId, issue }: Props) {
 
   const assigneeItems = (members ?? []).map((member) => ({
     value: member.userId,
-    label: member.name ?? member.email,
+    label: member.email,
   }));
 
   function handleOpenChange(
@@ -188,6 +189,10 @@ export function IssueDialog({ open, onOpenChange, projectId, issue }: Props) {
 
         queryClient.invalidateQueries({
           queryKey: getIssueControllerListQueryKey(),
+        });
+
+        queryClient.invalidateQueries({
+          queryKey: getIssueControllerHistoryQueryKey(issue.id),
         });
 
         handleOpenChange(false);

@@ -1,6 +1,6 @@
 "use client";
 
-import { Pencil } from "lucide-react";
+import { History, Pencil, Trash2 } from "lucide-react";
 import { useFormatter, useTranslations } from "next-intl";
 import { useState } from "react";
 
@@ -22,7 +22,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { DeleteIssueDialog } from "@/features/issues/delete-issue-dialog";
 import { IssueDialog } from "@/features/issues/issue-dialog";
+import { IssueHistoryDialog } from "@/features/issues/issue-history-dialog";
 import { useIssueControllerList } from "@/generated/api";
 import {
   IssuePriority,
@@ -71,6 +73,12 @@ export function ListIssues({ projectId }: Props) {
   const format = useFormatter();
   const [page, setPage] = useState(1);
   const [editedIssue, setEditedIssue] = useState<IssueResponseDto | null>(null);
+  const [deletedIssue, setDeletedIssue] = useState<IssueResponseDto | null>(
+    null,
+  );
+  const [historyIssue, setHistoryIssue] = useState<IssueResponseDto | null>(
+    null,
+  );
   const { data, isPending, isError } = useIssueControllerList({
     page,
     limit: PAGE_SIZE,
@@ -152,16 +160,38 @@ export function ListIssues({ projectId }: Props) {
                     dateStyle: "medium",
                   })}
                 </TableCell>
-                <TableCell className="text-right">
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon-sm"
-                    aria-label={t("edit.action", { key: issue.key })}
-                    onClick={() => setEditedIssue(issue)}
-                  >
-                    <Pencil aria-hidden />
-                  </Button>
+                <TableCell className="text-right whitespace-nowrap">
+                  <div className="inline-flex items-center gap-0.5">
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon-sm"
+                      className="text-muted-foreground"
+                      aria-label={t("history.action", { key: issue.key })}
+                      onClick={() => setHistoryIssue(issue)}
+                    >
+                      <History aria-hidden />
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon-sm"
+                      aria-label={t("edit.action", { key: issue.key })}
+                      onClick={() => setEditedIssue(issue)}
+                    >
+                      <Pencil aria-hidden />
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon-sm"
+                      className="text-muted-foreground hover:text-destructive"
+                      aria-label={t("remove.action", { key: issue.key })}
+                      onClick={() => setDeletedIssue(issue)}
+                    >
+                      <Trash2 aria-hidden />
+                    </Button>
+                  </div>
                 </TableCell>
               </TableRow>
             ))}
@@ -241,6 +271,36 @@ export function ListIssues({ projectId }: Props) {
         onOpenChange={(open) => {
           if (!open) {
             setEditedIssue(null);
+          }
+        }}
+      />
+
+      {historyIssue !== null && (
+        <IssueHistoryDialog
+          key={historyIssue.id}
+          issue={historyIssue}
+          open
+          onOpenChange={(open) => {
+            if (!open) {
+              setHistoryIssue(null);
+            }
+          }}
+        />
+      )}
+
+      <DeleteIssueDialog
+        issueId={deletedIssue?.id ?? ""}
+        issueKey={deletedIssue?.key}
+        open={deletedIssue !== null}
+        onOpenChange={(open) => {
+          if (!open) {
+            setDeletedIssue(null);
+          }
+        }}
+        onIssueDeleted={() => {
+          // Si se borró el último issue de la página, vuelve a la anterior.
+          if (issues.length === 1 && page > 1) {
+            setPage(page - 1);
           }
         }}
       />

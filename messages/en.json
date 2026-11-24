@@ -135,6 +135,16 @@
     "edit": {
       "action": "Edit issue {key}"
     },
+    "remove": {
+      "title": "Delete issue",
+      "description": "This issue will be permanently deleted. This action cannot be undone.",
+      "descriptionWithKey": "The issue {key} will be permanently deleted. This action cannot be undone.",
+      "action": "Delete issue {key}",
+      "cancel": "Cancel",
+      "confirm": "Delete",
+      "success": "Issue deleted",
+      "failed": "Could not delete the issue. Please try again."
+    },
     "dialog": {
       "title": "Create issue",
       "description": "Describe the work and choose who will take it.",
@@ -158,6 +168,31 @@
       "validation": {
         "title": "The title is required",
         "assignee": "Select an assignee"
+      }
+    },
+    "history": {
+      "title": "Issue history",
+      "description": "Activity recorded for {key}.",
+      "action": "View history of {key}",
+      "loading": "Loading history...",
+      "error": "Could not load the history. Please try again.",
+      "empty": "No activity yet",
+      "emptyValue": "None",
+      "change": "{from} → {to}",
+      "columns": {
+        "event": "Event",
+        "change": "Change",
+        "actor": "By",
+        "createdAt": "When"
+      },
+      "event": {
+        "CREATED": "Created",
+        "STATUS_CHANGED": "Status changed",
+        "PRIORITY_CHANGED": "Priority changed",
+        "ASSIGNEE_CHANGED": "Assignee changed"
+      },
+      "pagination": {
+        "label": "History pagination"
       }
     },
     "pagination": {
